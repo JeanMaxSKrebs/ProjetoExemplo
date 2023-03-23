@@ -1,34 +1,64 @@
-import 'react-native-gesture-handler';
-import * as React from 'react';
-import { View, Text, StatusBar } from 'react-native';
-import { useEffect, useState } from "react";
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SignIn from './src/screens/SignIn/index';
 import Home from './src/screens/Home';
-import SignIn from './src/screens/SignIn';
-import SignUp from './src/screens/SignUp';
+import Preload from './src/screens/Preload/index';
+import SignUp from './src/screens/SignUp/index';
 import ForgotPassword from './src/screens/ForgotPassword';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import { COLORS } from './src/assets/colors';
 
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-const Stack = createStackNavigator();
+const AuthStack = () => (
+  <Stack.Navigator
+    initialRouteName="Preload"
+    screenOptions={{
+      headerShown: false,
+    }}>
+    <Stack.Screen component={Preload} name="Preload" />
+    <Stack.Screen component={SignIn} name="SignIn" options={SignIn} />
+    <Stack.Screen component={SignUp} name="SignUp" options={SignUp} />
+    <Stack.Screen component={ForgotPassword} name="ForgotPassword" options={ForgotPasswordStyle} />
+  </Stack.Navigator>
+);
 
-const App = () => {
-  return (
-    <NavigationContainer>
-      <StatusBar backgroundColor= {COLORS.primaryDark} />
-      <Stack.Navigator initialRouteName='SignIn'>
-        <Stack.Screen name="SignIn" component={SignIn} options={SignInStyle}/>
-        <Stack.Screen name="Home" component={Home} options={HomeStyle} />
-        <Stack.Screen name="SignUp" component={SignUp}options={SignUpStyle} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={ForgotPasswordStyle} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+const AppStack = () => (
+  <Tab.Navigator
+      initialRouteName="Home"
+    screenOptions={{
+      headerShown: false,
+    }}>
+    <Tab.Screen component={Home} name="Home" options={Home}/>
+    {/* <Tab.Screen component={Livros} name="Livros" /> */}
+  </Tab.Navigator>
+);
+
+const App = () => (
+  <NavigationContainer>
+    <Stack.Navigator
+      initialRouteName="AuthStack"
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen component={AuthStack} name="AuthStack" />
+      <Stack.Screen component={AppStack} name="AppStack" />
+    </Stack.Navigator>
+  </NavigationContainer>
+);
+
 
 export default App;
 
+const PreloadStyle = {
+  headerTitleAlign: 'center',
+  title: 'GERENCIA LIVROS',
+  headerStyle: { backgroundColor: COLORS.secundary },
+  headerTitleStyle: { color: COLORS.primaryDark },
+}
 const SignInStyle = {
   // headerLeft: false,
   headerTitleAlign: 'center',

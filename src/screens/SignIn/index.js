@@ -1,21 +1,41 @@
 import React, { useState } from 'react';
 import { TextInput } from 'react-native';
 import { SafeAreaView, ScrollView, View, Text, StyleSheet, Image, Alert } from 'react-native';
-import MeuButton from '../components/MeuButton';
-import { COLORS } from '../assets/colors';
+import MeuButton from '../../components/MeuButton';
+import { COLORS } from '../../assets/colors';
 import app from '@react-native-firebase/app'
 import auth from '@react-native-firebase/auth'
-import { AuthUserContext } from '../context/AuthUserProvider';
 import { CommonActions } from '@react-navigation/native';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import Loading from '../../components/Loading';
 
 const SignIn = ({ navigation }) => {
+
     // console.log(app);
     // console.log(auth);
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [loading, setLoading] = useState(false);
+
     const recuperarSenha = () => {
         // alert('abrir modal recuperar senha');
         navigation.navigate('ForgotPassword');
+    }
+
+    async function storeUserSession(email, senha) {
+        try {
+            await EncryptedStorage.setItem(
+                "user_session",
+                JSON.stringify({
+                    email,
+                    senha,
+                })
+            );
+        } catch (error) {
+            console.log('ola');
+            console.error('SignIn, storeUserSession: ' + error);
+            console.log('ola2');
+        }
     }
 
     const cadastrar = () => {
@@ -23,60 +43,54 @@ const SignIn = ({ navigation }) => {
         navigation.navigate('SignUp');
     }
 
-    const entrar = () => {
-        console.log(`email: ${email} senha: ${senha}`);
-        if (email !== '' && senha !== '') {
-            auth()
-                .signInWithEmailAndPassword(email, senha)
-                .then(() => {
-                    if(!auth().currentUser.emailVerified){
-                        Alert.alert('Erro', 'Você deve Verificar o seu Email')
-                        return;
-                    }
-                    // console.log('entrou'),
-                    // setEmail('');
-                    // setSenha('');
-                    navigation.dispatch(
-                        CommonActions.reset({
-                            index: 0,
-                            routes: [{ name: 'Home' }],
-                        }),
-                    );
-                })
-                .catch((e) => {
-                    console.log('SignIn: erro em entrar:' + e);
-                    switch (e.code) {
-                        case 'auth/user-not-found':
-                            Alert.alert('Erro', 'Usuário não encontrado.');
-                            break;
-                        case 'auth/wrong-password':
-                            Alert.alert('Erro', 'Senha Incorreta.');
-                            break;
-                        case 'auth/invalid-email':
-                            Alert.alert('Erro', 'Email Inválido.');
-                            break;
-                        case 'auth/user-disabled':
-                            Alert.alert('Erro', 'Usuário Desativado.');
-                            break;
-                    }
-                });
-            // alert('logar no sistema');
+    const entrar = async () => {
+        // console.log(`email: ${email} senha: ${senha}`);
+        if (email && senha) {
+            try {
+                // console.log('entrou'),
+                // setEmail('');
+                // setSenha('');
+
+
+                setLoading(true);
+                await auth().signInWithEmailAndPassword(email, senha);
+                await storeUserSession(email, senha);
+                setLoading(false);
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [{ name: 'AppStack' }],
+                    }),
+                );
+            } catch (e) {
+                console.log('SignIn: erro em entrar:' + e);
+                switch (e.code) {
+                    case 'auth/user-not-found':
+                        Alert.alert('Erro', 'Usuário não encontrado.');
+                        break;
+                    case 'auth/wrong-password':
+                        Alert.alert('Erro', 'Senha Incorreta.');
+                        break;
+                    case 'auth/invalid-email':
+                        Alert.alert('Erro', 'Email Inválido.');
+                        break;
+                    case 'auth/user-disabled':
+                        Alert.alert('Erro', 'Usuário Desativado.');
+                        break;
+                }
+            }
         } else {
             Alert.alert('Erro', 'Por Favor, Digite Email e Senha.');
         }
     }
 
     return (
-
-        //safeareaview + scrollview impede div inferior de atrapalhar 
-        //ao usar teclado
         <SafeAreaView style={styles.container}>
-            {/* flexGrow mantem 100% */}
-            <ScrollView contentContainerStyle={{flexGrow: 1}}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.divSuperior}>
                     <Image
                         style={styles.image}
-                        source={require('../assets/images/logo.png')}
+                        source={require('../../assets/images/logo.png')}
                         accessibilityLabel={'logo do app'}
                     >
                     </Image>
@@ -86,19 +100,17 @@ const SignIn = ({ navigation }) => {
                         keyboardType="email-address"
                         returnKeyType="next"
                         onChangeText={(t) => setEmail(t)}
-                        onEndEditing={() => this.senhaTextInput.focus()}
+
                     />
                     <TextInput
-                        ref={(ref) => {
-                            this.senhaTextInput = ref;
-                        }}
+
                         style={styles.input}
                         secureTextEntry={true}
                         placeholder="Senha"
                         keyboardType="default"
                         returnKeyType="send"
                         onChangeText={(t) => setSenha(t)}
-                        onEndEditing={() => entrar()}
+
 
                     />
                     <Text style={styles.textEsqueceuSenha} onPress={recuperarSenha}>Esqueceu sua senha?</Text>
@@ -117,8 +129,9 @@ const SignIn = ({ navigation }) => {
                 </View>
             </ScrollView>
         </SafeAreaView>
-    );
-};
+    )
+}
+
 
 export default SignIn;
 
