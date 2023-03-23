@@ -32,7 +32,7 @@ const recover = () => {
                     Alert.alert('Erro', 'Usuário não encontrado.');
                     break;
                 case 'auth/wrong-password':
-                    aAlert.alert('Erro', 'Senha Incorreta.');
+                    Alert.alert('Erro', 'Senha Incorreta.');
                     break;
                 case 'auth/invalid-email':
                     Alert.alert('Erro', 'Email Inválido.');

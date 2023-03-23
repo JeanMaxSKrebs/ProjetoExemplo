@@ -4,6 +4,7 @@ import MeuButton from '../../components/MeuButton';
 import { Body, TextInput } from './styles';
 import auth from "@react-native-firebase/auth";
 import { CommonActions } from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
 
 const SignUp = ({ navigation }) => {
     const [nome, setNome] = useState('');
@@ -18,30 +19,46 @@ const SignUp = ({ navigation }) => {
                     .createUserWithEmailAndPassword(email, senha)
                     .then(() => {
                         let userFirebase = auth().currentUser;
-                        userFirebase.sendEmailVerification()
+                        let user = {};
+                        user.nome = nome;
+                        user.email = email;
+                        console.log(user);
+
+                        firestore()
+                            .collection('users')
+                            .doc(userFirebase)
+                            .set(user)
                             .then(() => {
-                                Alert; alert('Informação', 'Foi Enviado um email para'
-                                    + email
-                                    + 'para verificação');
-                                navigation.dispatch(
-                                    CommonActions.reset({
-                                        index: 0,
-                                        routes: [{ name: 'Home' }],
-                                    }),
-                                );
+                                console.log('SignUp Cadastrar: User Added!1');
+                                userFirebase
+                                    .sendEmailVerification()
+                                    .then(() => {
+                                        console.log('SignUp Cadastrar: User Added!2');
+                                        Alert.alert('Informação', 'Foi Enviado um email para: ' + email + 'para verificação',
+                                        );
+                                        navigation.dispatch(
+                                            CommonActions.reset({
+                                                index: 0,
+                                                routes: [{ name: 'SignIn' }],
+                                            }),
+                                        );
+                                    })
+                                    .catch((e) => {
+                                        console.log('SignUp: cadastrar(01):' + e);
+                                    });
                             })
                             .catch((e) => {
-                                console.log('SignUp: cadastrar(01):' + e);
+                                console.log('SignUp: cadastrar(02):' + e);
                             });
                     })
                     .catch((e) => {
-                        console.log('SignUp: cadastrar(02):' + e);
+                        console.log('SignUp: cadastrar(03):' + e);
                         switch (e.code) {
                             case 'auth/email-already-in-use':
                                 Alert.alert('Erro', 'Email já esta em uso.');
                                 break;
                             case 'auth/operation-not-allowed':
-                                aAlert.alert('Erro', 'Problemas ao fazer o cadastro.');
+                                Alert.alert('Erro', 'Problemas ao fazer o cadastro.');
                                 break;
                             case 'auth/invalid-email':
                                 Alert.alert('Erro', 'Email Inválido.');
