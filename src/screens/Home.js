@@ -8,8 +8,8 @@ const Home = ({ navigation }) => {
         navigation.setOptions({
             // headerLeft: false,
             headerTitleAlign: 'center',
-            name: 'GERENCIA LIVROS',
-            // title: 'GERENCIA LIVROS',// deixei a name pq senao muda o nome da tab
+            // name: 'GERENCIA LIVROS',
+            title: 'GERENCIA LIVROS',// deixei a name pq senao muda o nome da tab
             headerStyle: { backgroundColor: COLORS.primaryDark },
             headerTintColor: {color: COLORS.black},
             headerRight: () => <LogoutButton />,

@@ -7,6 +7,7 @@ import Preload from './src/screens/Preload';
 import SignUp from './src/screens/SignUp';
 import ForgotPassword from './src/screens/ForgotPassword';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from "react-native-vector-icons/Ionicons";
 
 import { COLORS } from './src/assets/colors';
 import { StatusBar } from 'react-native';
@@ -35,7 +36,13 @@ const AppStack = () => (
       screenOptions={{
         headerShown: true,
       }}>
-      <Tab.Screen component={Home} name="Home" />
+      <Tab.Screen component={Home} name="Home" options={{
+        tabBarLabel: "Home",
+        tabBarIcon: () => (
+          <Icon name="library" color={COLORS.primaryDark}></Icon>
+        ),
+      }} 
+      />
       <Tab.Screen component={Home} name="Teste" />
     </Tab.Navigator>
 );
