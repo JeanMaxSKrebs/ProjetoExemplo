@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignIn from '../screens/SignIn';
 import livros from '../screens/livros';
+import Livro from '../screens/Livro';
 import Home from '../screens/Home';
 import Preload from '../screens/Preload';
 import SignUp from '../screens/SignUp';
@@ -49,6 +50,10 @@ const AuthStack = () => (
           tabBarIcon: () => (
             <Icon name="library" color={COLORS.primaryDark}></Icon>
           ),
+        }} 
+        />
+        <Tab.Screen component={Livro} name="Livro" options={{
+          tabBarLabel: "Livro",
         }} 
         />
       </Tab.Navigator>
