@@ -6,7 +6,7 @@ import auth from '@react-native-firebase/auth';
 import SignIn from '../SignIn/index';
 import Home from '../Home';
 import SignUp from '../SignUp/index';
-import {Container, Image} from './style';
+import {Container, Image} from './styles';
 import { COLORS } from "../../assets/colors";
 
 

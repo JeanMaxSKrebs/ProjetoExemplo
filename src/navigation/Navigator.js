@@ -2,6 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignIn from '../screens/SignIn';
+import livros from '../screens/livros';
 import Home from '../screens/Home';
 import Preload from '../screens/Preload';
 import SignUp from '../screens/SignUp';
@@ -39,11 +40,17 @@ const AuthStack = () => (
         <Tab.Screen component={Home} name="Home" options={{
           tabBarLabel: "Home",
           tabBarIcon: () => (
+            <Icon name="home" color={COLORS.primaryDark}></Icon>
+          ),
+        }} 
+        />
+        <Tab.Screen component={livros} name="livros" options={{
+          tabBarLabel: "livros",
+          tabBarIcon: () => (
             <Icon name="library" color={COLORS.primaryDark}></Icon>
           ),
         }} 
         />
-        <Tab.Screen component={Home} name="Teste" />
       </Tab.Navigator>
   );
   
