@@ -32,9 +32,7 @@ const SignIn = ({ navigation }) => {
                 })
             );
         } catch (error) {
-            console.log('ola');
             console.error('SignIn, storeUserSession: ' + error);
-            console.log('ola2');
         }
     }
 
@@ -103,14 +101,12 @@ const SignIn = ({ navigation }) => {
 
                     />
                     <TextInput
-
                         style={styles.input}
                         secureTextEntry={true}
                         placeholder="Senha"
                         keyboardType="default"
                         returnKeyType="send"
                         onChangeText={(t) => setSenha(t)}
-
 
                     />
                     <Text style={styles.textEsqueceuSenha} onPress={recuperarSenha}>Esqueceu sua senha?</Text>
@@ -128,6 +124,7 @@ const SignIn = ({ navigation }) => {
                     </View>
                 </View>
             </ScrollView>
+            {loading && <Loading />}
         </SafeAreaView>
     )
 }

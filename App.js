@@ -20,11 +20,13 @@ const AuthStack = () => (
       headerShown: false,
     }}>
     <Stack.Screen component={Preload} name="Preload" />
-    <Stack.Screen component={SignIn} name="SignIn" options={SignIn} />
-    <Stack.Screen component={SignUp} name="SignUp" options={SignUp} />
+    <Stack.Screen component={SignIn} name="SignIn" />
+    <Stack.Screen component={SignUp} name="SignUp" />
     <Stack.Screen component={ForgotPassword} name="ForgotPassword" options={ForgotPasswordStyle} />
   </Stack.Navigator>
 );
+
+
 
 const AppStack = () => (
   <Tab.Navigator
@@ -53,12 +55,12 @@ const App = () => (
 
 export default App;
 
-const PreloadStyle = {
-  headerTitleAlign: 'center',
-  title: 'GERENCIA LIVROS',
-  headerStyle: { backgroundColor: COLORS.secundary },
-  headerTitleStyle: { color: COLORS.primaryDark },
-}
+// const PreloadStyle = {
+//   headerTitleAlign: 'center',
+//   title: 'GERENCIA LIVROS',
+//   headerStyle: { backgroundColor: COLORS.secundary },
+//   headerTitleStyle: { color: COLORS.primaryDark },
+// }
 const SignInStyle = {
   // headerLeft: false,
   headerTitleAlign: 'center',
