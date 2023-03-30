@@ -1,14 +1,15 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SignIn from './src/screens/SignIn/index';
+import SignIn from './src/screens/SignIn';
 import Home from './src/screens/Home';
-import Preload from './src/screens/Preload/index';
-import SignUp from './src/screens/SignUp/index';
+import Preload from './src/screens/Preload';
+import SignUp from './src/screens/SignUp';
 import ForgotPassword from './src/screens/ForgotPassword';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { COLORS } from './src/assets/colors';
+import { StatusBar } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -17,11 +18,11 @@ const AuthStack = () => (
   <Stack.Navigator
     initialRouteName="Preload"
     screenOptions={{
-      headerShown: false,
+      headerShown: true,
     }}>
     <Stack.Screen component={Preload} name="Preload" />
-    <Stack.Screen component={SignIn} name="SignIn" />
-    <Stack.Screen component={SignUp} name="SignUp" />
+    <Stack.Screen component={SignIn} name="SignIn" options={SignInStyle} />
+    <Stack.Screen component={SignUp} name="SignUp" options={SignUpStyle} />
     <Stack.Screen component={ForgotPassword} name="ForgotPassword" options={ForgotPasswordStyle} />
   </Stack.Navigator>
 );
@@ -29,18 +30,19 @@ const AuthStack = () => (
 
 
 const AppStack = () => (
-  <Tab.Navigator
+    <Tab.Navigator
       initialRouteName="Home"
-    screenOptions={{
-      headerShown: false,
-    }}>
-    <Tab.Screen component={Home} name="Home" options={Home}/>
-    {/* <Tab.Screen component={Livros} name="Livros" /> */}
-  </Tab.Navigator>
+      screenOptions={{
+        headerShown: true,
+      }}>
+      <Tab.Screen component={Home} name="Home" />
+      <Tab.Screen component={Home} name="Teste" />
+    </Tab.Navigator>
 );
 
 const App = () => (
   <NavigationContainer>
+    <StatusBar backgroundColor={COLORS.primary} />
     <Stack.Navigator
       initialRouteName="AuthStack"
       screenOptions={{
@@ -55,12 +57,6 @@ const App = () => (
 
 export default App;
 
-// const PreloadStyle = {
-//   headerTitleAlign: 'center',
-//   title: 'GERENCIA LIVROS',
-//   headerStyle: { backgroundColor: COLORS.secundary },
-//   headerTitleStyle: { color: COLORS.primaryDark },
-// }
 const SignInStyle = {
   // headerLeft: false,
   headerTitleAlign: 'center',
@@ -82,10 +78,4 @@ const ForgotPasswordStyle = {
   headerStyle: { backgroundColor: COLORS.secundary },
   headerTitleStyle: { color: COLORS.primaryDark },
   headerTintColor: COLORS.primaryDark,
-}
-const HomeStyle = {
-  headerTitleAlign: 'center',
-  title: 'GERENCIA LIVROS',
-  headerStyle: { backgroundColor: COLORS.secundary },
-  headerTitleStyle: { color: COLORS.primaryDark },
 }

@@ -6,9 +6,12 @@ import auth from '@react-native-firebase/auth';
 import SignIn from '../SignIn/index';
 import Home from '../Home';
 import SignUp from '../SignUp/index';
+import {Container, Image} from './style';
+import { COLORS } from "../../assets/colors";
+
 
 const Preload = ({navigation}) => {
-    console.log('oi')
+    // console.log('oi')
   async function retrieveUserSession() {
     try {
       const session = await EncryptedStorage.getItem('user_session');
@@ -17,6 +20,16 @@ const Preload = ({navigation}) => {
       console.error('Preload, retrieveUserSession: ' + error);
     }
   }
+
+  useEffect(() => {
+    navigation.setOptions({
+        // headerLeft: false,
+        headerTitleAlign: 'center',
+        title: 'Carregando',
+        headerStyle: { backgroundColor: COLORS.primaryDark },
+        headerTintColor: {color: COLORS.black},
+    });
+}, []);
 
   const entrar = async () => {
     const userSession = await retrieveUserSession();
@@ -27,12 +40,13 @@ const Preload = ({navigation}) => {
           userSession.email,
           userSession.senha,
         );
+        // console.log(navigation);
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
             routes: [{name: 'AppStack'}],
           }),
-        );
+          );
       } catch (e) {
         console.error('SignIn, entrar: ' + e);
         switch (e.code) {
@@ -65,9 +79,12 @@ const Preload = ({navigation}) => {
   }, []);
 
   return (
-    <View>
-      <Text>Preload</Text>
-    </View>
+    <Container>
+      <Image
+        source={require('../../assets/images/logo.png')}
+        accessibilityLabel="logo do app"
+      />
+    </Container>
   );
 };
 

@@ -1,42 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { COLORS } from "../assets/colors";
-import MeuButton from "../components/MeuButton";
+import LogoutButton from "../components/LogoutButton";
 
-
-const Home = (props) => {
-    console.log(props);
-    const [contador, setContador] = useState(0);
-
+const Home = ({ navigation }) => {
     useEffect(() => {
-        console.log("montou o componente")
+        navigation.setOptions({
+            // headerLeft: false,
+            headerTitleAlign: 'center',
+            name: 'GERENCIA LIVROS',
+            // title: 'GERENCIA LIVROS',// deixei a name pq senao muda o nome da tab
+            headerStyle: { backgroundColor: COLORS.primaryDark },
+            headerTintColor: {color: COLORS.black},
+            headerRight: () => <LogoutButton />,
+        });
     }, []);
-    useEffect(() => {
-        console.log("Fez Update")
-    });
-    useEffect(() => {
-        console.log('Fez Update do contador')
-    }, [contador]);
-
-    const add = () => {
-        setContador(contador + 1);
-        // alert('clicou');
-    }
-    const remove = () => {
-        setContador(contador - 1);
-        // alert('clicou');
-    }
-    const reset = () => {
-        setContador(0);
-    }
 
     return (
-        <View>
-            <Text style={styles.texto}>Contador = {contador}</Text>
-            <Text style={styles.texto}>pontos</Text>
-            <MeuButton texto='Add' onClick={add} />
-            <MeuButton texto='Remove' onClick={remove} />
-            <MeuButton texto='Reset' onClick={reset} />
+        <View style={styles.container}>
+            <Text style={styles.texto}>LIVROS</Text>
+
         </View>
     );
 };
@@ -44,8 +27,16 @@ const Home = (props) => {
 export default Home;
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     texto: {
         fontSize: 50,
         color: COLORS.primaryDark,
+    },
+    logout: {
+        backgroundColor: COLORS.red
     }
 });
