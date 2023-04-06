@@ -47,23 +47,6 @@ const Livros = ({ navigation }) => {
         );
       };
 
-    // const routeLivro = (value) => {
-    //     console.log('routeLivro');
-
-    //     console.log(value);;
-    // };
-
-//   const routeAddLivro = () => {
-//     console.log('routeADDLivros');
-
-//     navigation.dispatch(
-//       CommonActions.navigate({
-//         name: 'Livro',
-//         params: {Livros: null}, ///null??????
-//       }),
-//     );
-//   };
-
     return (
         
         <View style={styles.container}>

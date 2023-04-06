@@ -37,8 +37,44 @@ export const LivrosProvider = ({children}) => {
     }, 
     []);
 
+    const saveBook = async (book) => {
+      console.log(book)
+      try {
+        await firestore()
+          .collection('livros')
+          .doc(book.uid)
+          .set(
+            {
+                nome: book.nome,
+                descricao: book.descricao,
+                autor: book.autor,
+                volume: book.volume,
+            },
+            {merge: true},
+          )
+          return true;
+      } catch (error) {
+        console.error('BookProvider, saveBook: ', error);
+        return false;
+      }
+        
+      };
+    
+      const deleteBook = async uid => {
+        await firestore()
+          .collection('livros')
+          .doc(uid)
+          .delete()
+          .then(() => {
+            showToast('Livro excluído.');
+          })
+          .catch((error) => {
+            console.error('BookProvider, deleteBook: ', error);
+          });
+      };
+
     return(
-        <LivrosContext.Provider value={{Livros}}>
+        <LivrosContext.Provider value={{Livros, saveBook, deleteBook}}>
             {children}
         </LivrosContext.Provider>
     );

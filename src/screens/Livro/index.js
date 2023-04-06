@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { View } from 'react-native';
+import { Alert, View, ToastAndroid} from 'react-native';
 import { Container, TextInput } from "./styles";
 import MeuButton from '../../components/MeuButton';
 import Loading from '../../components/Loading';
@@ -13,7 +13,7 @@ const Livro = ({route}) => {
     const [volume, setVolume] = useState('');
     const [uid, setUid] = useState('');
     const [loading, setLoading] = useState(false);
-    const {save} = useContext(LivrosContext);
+    const {saveBook, deleteBook} = useContext(LivrosContext);
 
     console.log(route)
     console.log('teste')
@@ -41,7 +41,7 @@ const Livro = ({route}) => {
       }, [route]);
 
       const salvar = async () => {
-        if (nome && descricao && autor && volume && uid) {
+        if(await saveBook({uid,nome,descricao,autor,volume}))
           let livros = {};
           livros.uid = uid;
           livros.nome = nome;
@@ -49,7 +49,9 @@ const Livro = ({route}) => {
           livros.autor = autor;
           livros.volume = volume;
           setLoading(true);
-          await saveLivros(livros);
+          console.log('teste')
+          console.log(livros)
+          await saveBook(livros);
           setLoading(false);
           navigation.goBack();
         } else {
@@ -58,21 +60,19 @@ const Livro = ({route}) => {
       };
 
       const excluir = async () => {
-        if (nome && descricao && autor && volume && uid) {
-          let livros = {};
-          livros.uid = uid;
-          livros.nome = nome;
-          livros.descricao = descricao;
-          livros.autor = autor;
-          livros.volume = volume;
+          Alert.alert('Você tem Certeza?',)
           setLoading(true);
-          await saveLivros(livros);
+          await deleteBook(uid);
           setLoading(false);
           navigation.goBack();
-        } else {
-          Alert.alert('Atenção', 'Digite todos os campos.');
-        }
-      };
+          Alert.alert('Atenção', 'Digite todos os campos.', [
+            
+
+
+
+        ]);
+      }
+    
 
       return (
       <Container>
