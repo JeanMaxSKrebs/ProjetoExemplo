@@ -11,7 +11,7 @@ import AddFloatButton from "../../components/AddFloatButton"
 import {CommonActions} from '@react-navigation/native';
 
 const Livros = ({ navigation }) => {
-    const {livros} = useContext(LivrosContext);
+    const {Livros} = useContext(LivrosContext);
 
     useEffect(() => {
         navigation.setOptions({
@@ -23,37 +23,60 @@ const Livros = ({ navigation }) => {
             headerTintColor: {color: COLORS.black},
             headerRight: () => <LogoutButton />,
         });
-        // console.log(livros);
-    }, [livros]);
-
-    const routeLivro = value => {
-        // console.log('routeLivrso');
-
-        console.log(value);
-    };
+        console.log(Livros);
+    }, [Livros]);
 
 
-  const routeAddLivro = () => {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'Livro',
-        params: {livros: null},
-      }),
-    );
-  };
+
+    const routeLivro = (item) => {
+        //console.log(item);
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: 'Livro',
+            params: {value: item},
+          }),
+        );
+      };
+    
+      const routeAddLivro = () => {
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: 'Livro',
+            params: {value: null},
+          }),
+        );
+      };
+
+    // const routeLivro = (value) => {
+    //     console.log('routeLivro');
+
+    //     console.log(value);;
+    // };
+
+//   const routeAddLivro = () => {
+//     console.log('routeADDLivros');
+
+//     navigation.dispatch(
+//       CommonActions.navigate({
+//         name: 'Livro',
+//         params: {Livros: null}, ///null??????
+//       }),
+//     );
+//   };
 
     return (
+        
         <View style={styles.container}>
             <Image
             source={require('../../assets/images/logo.png')}
             accessibilityLabel="logo do app"
             />
             <Text style={styles.texto}></Text>
-            {livros.map((valor, key) => {
-                return <Item item={valor} onPress={routeLivro(valor)} key={key} />
+            {Livros.map((valor, key) => {
+                return <Item item={valor} onPress={() => routeLivro(valor)} key={key} />
             })}
 
-            <AddFloatButton onClick={() => routeAddLivro()} />
+            <AddFloatButton onClick={() => routeAddLivro(null)} />
         </View>
     );
 };

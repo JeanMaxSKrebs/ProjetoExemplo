@@ -4,7 +4,7 @@ import firestore from "@react-native-firebase/firestore";
 export const LivrosContext = createContext({});
 
 export const LivrosProvider = ({children}) => {
-    const [livros, setLivros] = useState([]);
+    const [Livros, setLivros] = useState([]);
 
     useEffect(() => {
         const listener = firestore()
@@ -38,7 +38,7 @@ export const LivrosProvider = ({children}) => {
     []);
 
     return(
-        <LivrosContext.Provider value={{livros}}>
+        <LivrosContext.Provider value={{Livros}}>
             {children}
         </LivrosContext.Provider>
     );

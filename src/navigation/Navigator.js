@@ -2,7 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignIn from '../screens/SignIn';
-import livros from '../screens/livros';
+import Livros from '../screens/Livros';
 import Livro from '../screens/Livro';
 import Home from '../screens/Home';
 import Preload from '../screens/Preload';
@@ -45,17 +45,14 @@ const AuthStack = () => (
           ),
         }} 
         />
-        <Tab.Screen component={livros} name="livros" options={{
-          tabBarLabel: "livros",
+        <Tab.Screen component={Livros} name="Livros" options={{
+          tabBarLabel: "Livros",
           tabBarIcon: () => (
             <Icon name="library" color={COLORS.primaryDark}></Icon>
           ),
         }} 
         />
-        <Tab.Screen component={Livro} name="Livro" options={{
-          tabBarLabel: "Livro",
-        }} 
-        />
+        
       </Tab.Navigator>
   );
   
@@ -69,6 +66,7 @@ const AuthStack = () => (
       }}>
       <Stack.Screen component={AuthStack} name="AuthStack" />
       <Stack.Screen component={AppStack} name="AppStack" />
+      <Stack.Screen component={Livro} name="Livro"/>
     </Stack.Navigator>
   </NavigationContainer>
   )
