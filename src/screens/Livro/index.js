@@ -6,7 +6,7 @@ import Loading from '../../components/Loading';
 import {LivrosContext} from "../../context/LivrosProvider";
 import DeleteButton from "../../components/DeleteButton";
 
-const Livro = ({route}) => {
+const Livro = ({route, navigation}) => {
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
     const [autor, setAutor] = useState('');
@@ -41,7 +41,7 @@ const Livro = ({route}) => {
       }, [route]);
 
       const salvar = async () => {
-        if(await saveBook({uid,nome,descricao,autor,volume}))
+        if(await saveBook({uid,nome,descricao,autor,volume})) {
           let livros = {};
           livros.uid = uid;
           livros.nome = nome;
@@ -49,13 +49,12 @@ const Livro = ({route}) => {
           livros.autor = autor;
           livros.volume = volume;
           setLoading(true);
-          console.log('teste')
           console.log(livros)
           await saveBook(livros);
           setLoading(false);
           navigation.goBack();
         } else {
-          Alert.alert('Atenção', 'Digite todos os campos.');
+          ToastAndroid.show('Atenção', 'Digite todos os campos.')
         }
       };
 
@@ -65,12 +64,7 @@ const Livro = ({route}) => {
           await deleteBook(uid);
           setLoading(false);
           navigation.goBack();
-          Alert.alert('Atenção', 'Digite todos os campos.', [
-            
-
-
-
-        ]);
+          ToastAndroid.show('Atenção', 'Digite todos os campos.');
       }
     
 

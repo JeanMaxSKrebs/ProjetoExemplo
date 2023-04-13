@@ -39,6 +39,7 @@ export const LivrosProvider = ({children}) => {
 
     const saveBook = async (book) => {
       console.log(book)
+      console.log("teste")
       try {
         await firestore()
           .collection('livros')
@@ -49,9 +50,10 @@ export const LivrosProvider = ({children}) => {
                 descricao: book.descricao,
                 autor: book.autor,
                 volume: book.volume,
-            },
-            {merge: true},
-          )
+              },
+              {merge: true},
+              )
+          console.log("teste2")
           return true;
       } catch (error) {
         console.error('BookProvider, saveBook: ', error);

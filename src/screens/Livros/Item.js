@@ -47,6 +47,7 @@ const Item = ({item, onPress}) => {
         <TextNome>{item.nome}</TextNome>
         <TextDescricao>{item.descricao}</TextDescricao>
         <TextAutor>{item.autor}</TextAutor>
+        <TextVolume>{item.volume}</TextVolume>
 
         {/* <Div>
         </Div> */}
