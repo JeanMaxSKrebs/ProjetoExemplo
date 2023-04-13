@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {TextInput} from 'react-native';
 import {
@@ -59,6 +60,10 @@ const SignIn = ({navigation}) => {
         await auth().signInWithEmailAndPassword(email, senha);
         await storeUserSession(email, senha);
         setLoading(false);
+        if (!auth().currentUser.emailVerified) {
+          Alert.alert('Erro', 'Você deve verificar seu email para prosseguir.');
+          return;
+        }
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
