@@ -1,17 +1,27 @@
 /* eslint-disable no-shadow */
-import React, {useEffect, useContext} from 'react';
-import { SafeAreaView, ScrollView, View, Text, StyleSheet} from 'react-native';
+import React, {useEffect, useContext, useState} from 'react';
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
 import {COLORS} from '../../assets/colors';
 import LogoutButton from '../../components/LogoutButton';
 import {LivrosContext} from '../../context/LivrosProvider';
 import {Image} from '../Preload/styles';
 import Item from './Item';
 import AddFloatButton from '../../components/AddFloatButton';
+import BuscaButton from '../../components/BuscaButton';
 
 import {CommonActions} from '@react-navigation/native';
+import { SafeAreaFrameContext } from 'react-native-safe-area-context';
 
 const Livros = ({navigation}) => {
   const {Livros} = useContext(LivrosContext);
+  const [input, setInput] = useState('');
 
   useEffect(() => {
     navigation.setOptions({
@@ -36,26 +46,41 @@ const Livros = ({navigation}) => {
       }),
     );
   };
+  const filter = input => {
+    console.log('Filter1');
+    console.log(input);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
+      <TextInput
+        placeholder="Pesquise livros"
+        keyboardType="numeric"
+        returnKeyType="go"
+        onChangeText={input => {
+          filter(input);
+          setInput(input);
+        }}
+        value={input}
+      />
+      <BuscaButton texto="Busca" onClick={() => filter(input)} />
+      <Image
+        source={require('../../assets/images/logo.png')}
+        accessibilityLabel="logo do app"
+      />
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
+        <Text style={styles.texto}> Coleções dos Livros </Text>
         <View style={styles.container}>
-          <Image
-            source={require('../../assets/images/logo.png')}
-            accessibilityLabel="logo do app"
-          />
           <Text style={styles.texto} />
           {Livros.map((valor, key) => {
             return (
               <Item item={valor} onPress={() => routeLivro(valor)} key={key} />
             );
           })}
-
-          <AddFloatButton onClick={() => routeLivro(null)} />
         </View>
       </ScrollView>
       {/* {loading && <Loading />} */}
+      <AddFloatButton onClick={() => routeLivro(null)} />
     </SafeAreaView>
   );
 };
@@ -69,7 +94,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   texto: {
-    fontSize: 50,
+    fontSize: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
     color: COLORS.primaryDark,
   },
   logout: {
