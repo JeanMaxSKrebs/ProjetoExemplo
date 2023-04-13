@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 import React, {useEffect, useContext} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import { SafeAreaView, ScrollView, View, Text, StyleSheet} from 'react-native';
 import {COLORS} from '../../assets/colors';
 import LogoutButton from '../../components/LogoutButton';
 import {LivrosContext} from '../../context/LivrosProvider';
@@ -38,20 +38,25 @@ const Livros = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require('../../assets/images/logo.png')}
-        accessibilityLabel="logo do app"
-      />
-      <Text style={styles.texto} />
-      {Livros.map((valor, key) => {
-        return (
-          <Item item={valor} onPress={() => routeLivro(valor)} key={key} />
-        );
-      })}
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+        <View style={styles.container}>
+          <Image
+            source={require('../../assets/images/logo.png')}
+            accessibilityLabel="logo do app"
+          />
+          <Text style={styles.texto} />
+          {Livros.map((valor, key) => {
+            return (
+              <Item item={valor} onPress={() => routeLivro(valor)} key={key} />
+            );
+          })}
 
-      <AddFloatButton onClick={() => routeLivro(null)} />
-    </View>
+          <AddFloatButton onClick={() => routeLivro(null)} />
+        </View>
+      </ScrollView>
+      {/* {loading && <Loading />} */}
+    </SafeAreaView>
   );
 };
 

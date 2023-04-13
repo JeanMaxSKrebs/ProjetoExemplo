@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {Alert, View, ToastAndroid} from 'react-native';
+import {Alert, ToastAndroid} from 'react-native';
 import {Container, TextInput} from './styles';
 import MeuButton from '../../components/MeuButton';
 import Loading from '../../components/Loading';
