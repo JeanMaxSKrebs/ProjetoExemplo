@@ -42,12 +42,6 @@ const Livro = ({route, navigation}) => {
   const salvar = async () => {
     setLoading(true);
     if (await saveBook({uid, nome, descricao, autor, volume})) {
-      // let livros = {};
-      // livros.uid = uid;
-      // livros.nome = nome;
-      // livros.descricao = descricao;
-      // livros.autor = autor;
-      // livros.volume = volume;
       setLoading(false);
       navigation.goBack();
     } else {

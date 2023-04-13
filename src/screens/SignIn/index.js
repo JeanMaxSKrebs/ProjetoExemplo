@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import MeuButton from '../../components/MeuButton';
 import {COLORS} from '../../assets/colors';
-import app from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import {CommonActions} from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';

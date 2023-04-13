@@ -15,18 +15,9 @@ export const LivrosProvider = ({children}) => {
     const listener = firestore()
       .collection('livros')
       .orderBy('nome')
-      // .onSnapshot((snapShot) => {
       .onSnapshot(snapShot => {
-        //implemente aqui
-        // console.log(snapShot);
-
-        // console.log(snapShot._docs[0]._data);
-
-        // snapShot.forEach(doc =>
-        // console.log(doc.id, ' => ', doc.data()))
         let data = [];
         snapShot.forEach(doc => {
-          // console.log(doc.id, ' => ', doc.data());
           data.push({
             uid: doc.id,
             nome: doc.data().nome,

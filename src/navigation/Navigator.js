@@ -12,7 +12,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import {COLORS} from '../assets/colors';
-import {StatusBar} from 'react-native';
+import {StyleSheet, StatusBar, ScrollView, Text} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -58,6 +58,15 @@ const AppStack = () => (
         tabBarIcon: () => <Icon name="library" color={COLORS.primaryDark} />,
       }}
     />
+    {/* <ScrollView style={styles.scrollView}>
+      <Text>
+        LoremLoremLoremLoremLoremLorem
+        LoremLoremLoremLoremLoremLoremLo
+        remLoremLoremLoremLoremLoremLoremLoremLoremL
+        oremLoremL oremLoremLor 
+        emLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem
+      </Text>
+    </ScrollView> */}
   </Tab.Navigator>
 );
 
@@ -100,3 +109,10 @@ const ForgotPasswordStyle = {
   headerTitleStyle: {color: COLORS.primaryDark},
   headerTintColor: COLORS.primaryDark,
 };
+
+const styles = StyleSheet.create({
+  scrollView: {
+    backgroundColor: 'pink',
+    marginHorizontal: 20,
+  },
+});
