@@ -1,17 +1,13 @@
 import React, {useEffect} from 'react';
-import {View, Text, Alert} from 'react-native';
+import {Alert} from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {CommonActions} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
-import SignIn from '../SignIn/index';
-import Home from '../Home';
-import SignUp from '../SignUp/index';
 import {Container, Image} from './styles';
-import { COLORS } from "../../assets/colors";
-
+import {COLORS} from '../../assets/colors';
 
 const Preload = ({navigation}) => {
-    // console.log('oi')
+  // console.log('oi')
   async function retrieveUserSession() {
     try {
       const session = await EncryptedStorage.getItem('user_session');
@@ -23,13 +19,15 @@ const Preload = ({navigation}) => {
 
   useEffect(() => {
     navigation.setOptions({
-        // headerLeft: false,
-        headerTitleAlign: 'center',
-        title: 'Carregando',
-        headerStyle: { backgroundColor: COLORS.primaryDark },
-        headerTintColor: {color: COLORS.black},
+      // headerLeft: false,
+      headerTitleAlign: 'center',
+      title: 'Carregando',
+      headerStyle: {backgroundColor: COLORS.primaryDark},
+      headerTintColor: {color: COLORS.black},
     });
-}, []);
+    entrar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const entrar = async () => {
     const userSession = await retrieveUserSession();
@@ -46,7 +44,7 @@ const Preload = ({navigation}) => {
             index: 0,
             routes: [{name: 'AppStack'}],
           }),
-          );
+        );
       } catch (e) {
         console.error('SignIn, entrar: ' + e);
         switch (e.code) {
@@ -65,18 +63,14 @@ const Preload = ({navigation}) => {
         }
       }
     } else {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{name: 'SignIn'}],
-          }),
-        );
-      }
-    };
-
-  useEffect(() => {
-    entrar();
-  }, []);
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: 'SignIn'}],
+        }),
+      );
+    }
+  };
 
   return (
     <Container>
