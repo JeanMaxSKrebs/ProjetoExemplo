@@ -1,27 +1,19 @@
 /* eslint-disable no-shadow */
 import React, {useEffect, useContext, useState} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-} from 'react-native';
+import {SafeAreaView, ScrollView, View, Text, StyleSheet} from 'react-native';
 import {COLORS} from '../../assets/colors';
 import LogoutButton from '../../components/LogoutButton';
 import {LivrosContext} from '../../context/LivrosProvider';
 import {Image} from '../Preload/styles';
 import Item from './Item';
 import AddFloatButton from '../../components/AddFloatButton';
-import BuscaButton from '../../components/BuscaButton';
 
 import {CommonActions} from '@react-navigation/native';
-import { SafeAreaFrameContext } from 'react-native-safe-area-context';
+import SearchBar from '../../components/SearchBar';
 
 const Livros = ({navigation}) => {
   const {Livros} = useContext(LivrosContext);
-  const [input, setInput] = useState('');
+  const [LivrosTemp, setLivrosTemp] = useState('');
 
   useEffect(() => {
     navigation.setOptions({
@@ -46,24 +38,30 @@ const Livros = ({navigation}) => {
       }),
     );
   };
-  const filter = input => {
-    console.log('Filter1');
-    console.log(input);
+  const filterLivro = text => {
+    console.log(text);
+    let filtro = [];
+
+    Livros.filter(livro => {
+      if (livro.nome.toLowerCase().includes(text.toLowerCase())) {
+        console.log(livro);
+        filtro.push(livro);
+      }
+    });
+    console.log("filtro");
+    console.log(filtro);
+
+    if (filtro.length > 0) {
+      setLivrosTemp(filtro);
+    } else {
+      setLivrosTemp([]);
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <TextInput
-        placeholder="Pesquise livros"
-        keyboardType="numeric"
-        returnKeyType="go"
-        onChangeText={input => {
-          filter(input);
-          setInput(input);
-        }}
-        value={input}
-      />
-      <BuscaButton texto="Busca" onClick={() => filter(input)} />
+      <SearchBar search={filterLivro} />
+
       <Image
         source={require('../../assets/images/logo.png')}
         accessibilityLabel="logo do app"
@@ -71,12 +69,26 @@ const Livros = ({navigation}) => {
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
         <Text style={styles.texto}> Coleções dos Livros </Text>
         <View style={styles.container}>
-          <Text style={styles.texto} />
-          {Livros.map((valor, key) => {
-            return (
-              <Item item={valor} onPress={() => routeLivro(valor)} key={key} />
-            );
-          })}
+          {console.log(LivrosTemp)}
+          {LivrosTemp.lenght > 0
+            ? LivrosTemp.map((valor, key) => {
+                return (
+                  <Item
+                    item={valor}
+                    onPress={() => routeLivro(valor)}
+                    key={key}
+                  />
+                );
+              })
+            : Livros.map((valor, key) => {
+                return (
+                  <Item
+                    item={valor}
+                    onPress={() => routeLivro(valor)}
+                    key={key}
+                  />
+                );
+              })}
         </View>
       </ScrollView>
       {/* {loading && <Loading />} */}
