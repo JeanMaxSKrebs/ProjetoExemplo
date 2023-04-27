@@ -66,16 +66,6 @@ export const LivrosProvider = ({children}) => {
       });
   };
 
-  const filterBook = async nome => {
-    await firestore()
-      .collection('livros')
-      .doc(nome)
-      .then(() => {})
-      .catch(error => {
-        console.error('BookProvider, deleteBook: ', error);
-      });
-  };
-
   return (
     <LivrosContext.Provider value={{livros, saveBook, deleteBook}}>
       {children}

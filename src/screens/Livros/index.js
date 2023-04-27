@@ -25,8 +25,7 @@ const Livros = ({navigation}) => {
       // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => <LogoutButton />,
     });
-    console.log(livros);
-  }, [livros, navigation]);
+  }, [navigation]);
 
   const routeLivro = item => {
     //console.log(item);
@@ -40,19 +39,17 @@ const Livros = ({navigation}) => {
   const filterLivro = text => {
     // console.log(text);
     let filtro = [];
-
     livros.filter(livro => {
       if (livro.nome.toLowerCase().includes(text.toLowerCase())) {
-        console.log(livro);
         filtro.push(livro);
       }
     });
     // console.log('filtro');
     // console.log(filtro);
-    // console.log(filtro.length);
-
+    console.log(filtro.length);
     if (filtro.length > 0) {
       setLivrosTemp(filtro);
+      console.log(filtro.length);
     } else {
       setLivrosTemp([]);
     }
@@ -69,8 +66,8 @@ const Livros = ({navigation}) => {
       <ScrollView>
         <Text style={styles.texto}> Coleções dos Livros </Text>
         <View style={styles.container}>
-          {livrosTemp.lenght > 0
-            ? livros.map((valor, key) => {
+          {livrosTemp.length > 0
+            ? livrosTemp.map((valor, key) => {
                 return (
                   <Item
                     item={valor}
@@ -79,7 +76,7 @@ const Livros = ({navigation}) => {
                   />
                 );
               })
-            : livrosTemp.map((valor, key) => {
+            : livros.map((valor, key) => {
                 return (
                   <Item
                     item={valor}
