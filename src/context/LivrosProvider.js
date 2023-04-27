@@ -5,7 +5,7 @@ import firestore from '@react-native-firebase/firestore';
 export const LivrosContext = createContext({});
 
 export const LivrosProvider = ({children}) => {
-  const [Livros, setLivros] = useState([]);
+  const [livros, setLivros] = useState([]);
 
   const showToast = message => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
@@ -77,7 +77,7 @@ export const LivrosProvider = ({children}) => {
   };
 
   return (
-    <LivrosContext.Provider value={{Livros, saveBook, deleteBook}}>
+    <LivrosContext.Provider value={{livros, saveBook, deleteBook}}>
       {children}
     </LivrosContext.Provider>
   );

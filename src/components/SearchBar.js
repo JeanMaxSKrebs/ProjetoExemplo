@@ -8,7 +8,7 @@ const SearchBar = ({search}) => {
   return (
     <TextInput
       placeholder="Pesquise livros"
-      keyboardType="numeric"
+      keyboardType="default"
       returnKeyType="go"
       onChangeText={t => {
         search(t);

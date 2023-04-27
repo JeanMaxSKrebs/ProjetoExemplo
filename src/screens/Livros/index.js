@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import React, {useEffect, useContext, useState} from 'react';
 import {SafeAreaView, ScrollView, View, Text, StyleSheet} from 'react-native';
 import {COLORS} from '../../assets/colors';
@@ -12,8 +11,8 @@ import {CommonActions} from '@react-navigation/native';
 import SearchBar from '../../components/SearchBar';
 
 const Livros = ({navigation}) => {
-  const {Livros} = useContext(LivrosContext);
-  const [LivrosTemp, setLivrosTemp] = useState('');
+  const {livros} = useContext(LivrosContext);
+  const [livrosTemp, setLivrosTemp] = useState([]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -26,8 +25,8 @@ const Livros = ({navigation}) => {
       // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => <LogoutButton />,
     });
-    console.log(Livros);
-  }, [Livros, navigation]);
+    console.log(livros);
+  }, [livros, navigation]);
 
   const routeLivro = item => {
     //console.log(item);
@@ -39,17 +38,18 @@ const Livros = ({navigation}) => {
     );
   };
   const filterLivro = text => {
-    console.log(text);
+    // console.log(text);
     let filtro = [];
 
-    Livros.filter(livro => {
+    livros.filter(livro => {
       if (livro.nome.toLowerCase().includes(text.toLowerCase())) {
         console.log(livro);
         filtro.push(livro);
       }
     });
-    console.log("filtro");
-    console.log(filtro);
+    // console.log('filtro');
+    // console.log(filtro);
+    // console.log(filtro.length);
 
     if (filtro.length > 0) {
       setLivrosTemp(filtro);
@@ -66,12 +66,11 @@ const Livros = ({navigation}) => {
         source={require('../../assets/images/logo.png')}
         accessibilityLabel="logo do app"
       />
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <ScrollView>
         <Text style={styles.texto}> Coleções dos Livros </Text>
         <View style={styles.container}>
-          {console.log(LivrosTemp)}
-          {LivrosTemp.lenght > 0
-            ? LivrosTemp.map((valor, key) => {
+          {livrosTemp.lenght > 0
+            ? livros.map((valor, key) => {
                 return (
                   <Item
                     item={valor}
@@ -80,7 +79,7 @@ const Livros = ({navigation}) => {
                   />
                 );
               })
-            : Livros.map((valor, key) => {
+            : livrosTemp.map((valor, key) => {
                 return (
                   <Item
                     item={valor}
