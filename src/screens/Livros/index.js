@@ -46,10 +46,10 @@ const Livros = ({navigation}) => {
     });
     // console.log('filtro');
     // console.log(filtro);
-    console.log(filtro.length);
+    // console.log(filtro.length);
     if (filtro.length > 0) {
       setLivrosTemp(filtro);
-      console.log(filtro.length);
+      // console.log(filtro.length);
     } else {
       setLivrosTemp([]);
     }
@@ -57,7 +57,7 @@ const Livros = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <SearchBar search={filterLivro} />
+      <SearchBar search={filterLivro} name={'Livros'} />
 
       <Image
         source={require('../../assets/images/logo.png')}
@@ -87,7 +87,6 @@ const Livros = ({navigation}) => {
               })}
         </View>
       </ScrollView>
-      {/* {loading && <Loading />} */}
       <AddFloatButton onClick={() => routeLivro(null)} />
     </SafeAreaView>
   );

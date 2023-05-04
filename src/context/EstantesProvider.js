@@ -1,31 +1,43 @@
-import React, {createContext, useState, useContext} from 'react';
+import React, {createContext, useState, useContext, useEffect} from 'react';
+
 import {ToastAndroid} from 'react-native';
 
 import {ApiContext} from './ApiProvider';
 
-export const EstanteContext = createContext({});
+export const EstantesContext = createContext({});
 
 export const EstanteProvider = ({children}) => {
-  const [estantes, setEstantes] = useState([]);
+  const [shelves, setShelves] = useState([]);
   const [errorMessage, setErrorMessage] = useState({});
   const {api} = useContext(ApiContext);
 
-  //console.log(api);
+  // console.log(api);
+
+  useEffect(() => {
+    console.log('api');
+    console.log(api);
+    if (api) {
+      getShelves();
+      console.log(shelves);
+    }
+  }, [api]);
 
   const showToast = message => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   };
 
-  const getEstantes = async () => {
+  const getShelves = async () => {
     try {
+      console.log('api');
+      console.log(api);
       const response = await api.get('/estantes');
-      //console.log('Dados buscados via API');
-      //console.log(response.data);
-      //console.log(response.data.documents);
+      console.log('Dados buscados via API');
+      console.log(response.data);
+      console.log(response.data.documents);
       let data = [];
       response.data.documents.map(d => {
         let k = d.name.split(
-          'projects/pdm-aulas/databases/(default)/documents/estantes/',
+          'projects/pdm-aulas-71f86/databases/(default)/documents/estantes/',
         );
 
         data.push({
@@ -35,7 +47,7 @@ export const EstanteProvider = ({children}) => {
         });
       });
       data.sort((a, b) => b.nome.localeCompare(a.nome));
-      setEstantes(data);
+      setShelves(data);
     } catch (response) {
       setErrorMessage(response);
       console.log('Erro ao buscar via API.');
@@ -43,16 +55,17 @@ export const EstanteProvider = ({children}) => {
     }
   };
 
-  const saveEstante = async val => {
+  const saveShelf = async val => {
+    // console.log(val);
     try {
       await api.post('/estantes/', {
         fields: {
-          nome: {stringValue: val.nome},
-          tecnologias: {stringValue: val.tecnologias},
+          genero: {stringValue: val.genero},
+          quantidade: {stringValue: val.quantidade},
         },
       });
       showToast('Dados salvos.');
-      getEstantes();
+      getShelves();
     } catch (response) {
       setErrorMessage(response);
       console.log('Erro ao saveEstante via API.');
@@ -60,17 +73,17 @@ export const EstanteProvider = ({children}) => {
     }
   };
 
-  const updateEstante = async val => {
+  const updateShelf = async val => {
     //console.log(val);
     try {
       await api.patch('/estantes/' + val.uid, {
         fields: {
-          nome: {stringValue: val.nome},
-          tecnologias: {stringValue: val.tecnologias},
+          genero: {stringValue: val.genero},
+          quantidade: {stringValue: val.quantidade},
         },
       });
       showToast('Dados salvos.');
-      getEstantes();
+      getShelves();
     } catch (response) {
       setErrorMessage(response);
       console.log('Erro ao updateEstante via API.');
@@ -78,11 +91,11 @@ export const EstanteProvider = ({children}) => {
     }
   };
 
-  const deleteEstante = async val => {
+  const deleteShelf = async val => {
     try {
       await api.delete('/estantes/' + val);
       showToast('Estante excluída.');
-      getEstantes();
+      getShelves();
     } catch (response) {
       setErrorMessage(response);
       console.log('Erro ao deleteEstante via API.');
@@ -91,15 +104,14 @@ export const EstanteProvider = ({children}) => {
   };
 
   return (
-    <EstanteContext.Provider
+    <EstantesContext.Provider
       value={{
-        estantes,
-        getEstantes,
-        saveEstante,
-        updateEstante,
-        deleteEstante,
+        shelves,
+        saveShelf,
+        updateShelf,
+        deleteShelf,
       }}>
       {children}
-    </EstanteContext.Provider>
+    </EstantesContext.Provider>
   );
 };

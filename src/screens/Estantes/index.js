@@ -1,65 +1,102 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useContext, useEffect, useState} from 'react';
+import {SafeAreaView, ScrollView, View, Text, StyleSheet} from 'react-native';
+import {Image} from '../Preload/styles';
 import {CommonActions} from '@react-navigation/native';
-
+import {COLORS} from '../../assets/colors';
+import LogoutButton from '../../components/LogoutButton';
 import {Container, FlatList} from './styles';
 import Item from './Item.js';
 import AddFloatButton from '../../components/AddFloatButton';
-import Loading from '../../components/Loading';
+// import Loading from '../../components/Loading';
 import {EstantesContext} from '../../context/EstantesProvider';
+import SearchBar from '../../components/SearchBar';
 
-const Companies = ({navigation}) => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const {getCompanies, companies} = useContext(EstantesContext);
+const Estantes = ({navigation}) => {
+  const {shelves} = useContext(EstantesContext);
+  const [shelvesTemp, setShelvesTemp] = useState([]);
 
-  const fetchData = async () => {
-    await getCompanies(); //busca as companies via API
-    setLoading(false);
+  useEffect(() => {
+    navigation.setOptions({
+      // headerLeft: false,
+      headerTitleAlign: 'center',
+      // name: 'GERENCIA LIVROS',
+      title: 'BIBLIOTECA // ESTANTES', // deixei a name pq senao muda o nome da tab
+      headerStyle: {backgroundColor: COLORS.primaryDark},
+      headerTintColor: {color: COLORS.black},
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => <LogoutButton />,
+    });
+  }, [navigation]);
+
+  const filterEstante = text => {
+    // console.log(text);
+    let filtro = [];
+    shelves.filter(estante => {
+      if (estante.genero.toLowerCase().includes(text.toLowerCase())) {
+        filtro.push(estante);
+      }
+    });
+    // console.log('filtro');
+    // console.log(filtro);
+    // console.log(filtro.length);
+    if (filtro.length > 0) {
+      setShelvesTemp(filtro);
+      // console.log(filtro.length);
+    } else {
+      setShelvesTemp([]);
+    }
   };
 
-  useEffect(() => {
-    fetchData(); //busca as companies
-  }, []);
-
-  useEffect(() => {
-    //console.log(companies);
-    setData(companies);
-  }, [companies]);
-
-  const routeCompany = item => {
+  const routeEstante = item => {
     //console.log(item);
     navigation.dispatch(
       CommonActions.navigate({
-        name: 'Empresa',
-        params: {company: item},
-      }),
-    );
-  };
-
-  const routeAddCompany = () => {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'Empresa',
-        params: {company: null},
+        name: 'Estante',
+        params: {value: item},
       }),
     );
   };
 
   const renderItem = ({item}) => (
-    <Item item={item} onPress={() => routeCompany(item)} />
+    <Item item={item} onPress={() => routeEstante(item)} />
   );
 
   return (
-    <Container>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={item => item.uid}
+    <SafeAreaView style={styles.container}>
+      <SearchBar setSearch={filterEstante} name={'Estantes'} />
+      <Image
+        source={require('../../assets/images/estante.png')}
+        accessibilityLabel="logo do app"
       />
-      <AddFloatButton onClick={routeAddCompany} />
-      {loading && <Loading />}
-    </Container>
+      <Container>
+        {console.log(shelves)}
+        {console.log(shelvesTemp)}
+        <FlatList
+          data={shelvesTemp.length > 0 ? shelvesTemp : shelves}
+          renderItem={renderItem}
+          keyExtractor={item => item.uid}
+        />
+      </Container>
+      <AddFloatButton onClick={() => routeEstante(null)} />
+    </SafeAreaView>
   );
 };
-export default Companies;
+export default Estantes;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  texto: {
+    fontSize: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    color: COLORS.primaryDark,
+  },
+  logout: {
+    backgroundColor: COLORS.red,
+  },
+});

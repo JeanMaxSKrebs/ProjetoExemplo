@@ -19,6 +19,7 @@ const Livro = ({route, navigation}) => {
   // console.log(route.params)
 
   useEffect(() => {
+    console.log(route.params.value);
     if (route.params.value === null) {
       setNome('');
       setDescricao('');

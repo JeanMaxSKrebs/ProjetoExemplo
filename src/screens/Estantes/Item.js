@@ -28,7 +28,7 @@ const Item = ({item, onPress}) => {
     <Button onPress={onPress} underlayColor="transparent">
       <>
         <TextGenero>{item.genero}</TextGenero>
-        <TextQuantidade>{item.tecnologias}</TextQuantidade>
+        <TextQuantidade>{item.quantidade}</TextQuantidade>
       </>
     </Button>
   );
