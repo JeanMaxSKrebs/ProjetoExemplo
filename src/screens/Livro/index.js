@@ -11,6 +11,7 @@ const Livro = ({route, navigation}) => {
   const [descricao, setDescricao] = useState('');
   const [autor, setAutor] = useState('');
   const [volume, setVolume] = useState('');
+  const [genero, setGenero] = useState('');
   const [uid, setUid] = useState('');
   const [loading, setLoading] = useState(false);
   const {saveBook, deleteBook} = useContext(LivrosContext);
@@ -25,6 +26,7 @@ const Livro = ({route, navigation}) => {
       setDescricao('');
       setAutor('');
       setVolume('');
+      setGenero('');
       setUid('');
     } else {
       // console.log(route.params);
@@ -32,6 +34,7 @@ const Livro = ({route, navigation}) => {
       setDescricao(route.params.value.descricao);
       setAutor(route.params.value.autor);
       setVolume(route.params.value.volume);
+      setGenero(route.params.value.genero);
       setUid(route.params.value.uid);
     }
 
@@ -42,7 +45,7 @@ const Livro = ({route, navigation}) => {
 
   const salvar = async () => {
     setLoading(true);
-    if (await saveBook({uid, nome, descricao, autor, volume})) {
+    if (await saveBook({uid, nome, descricao, autor, volume, genero})) {
       setLoading(false);
       navigation.goBack();
     } else {
@@ -102,6 +105,13 @@ const Livro = ({route, navigation}) => {
         returnKeyType="go"
         onChangeText={t => setVolume(t)}
         value={volume}
+      />
+      <TextInput
+        placeholder="Genero"
+        keyboardType="default"
+        returnKeyType="go"
+        onChangeText={t => setGenero(t)}
+        value={genero}
       />
       <MeuButton texto="Salvar" onClick={salvar} />
       {uid ? <DeleteButton texto="Excluir" onClick={excluir} /> : null}

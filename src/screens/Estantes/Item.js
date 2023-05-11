@@ -28,7 +28,9 @@ const Item = ({item, onPress}) => {
     <Button onPress={onPress} underlayColor="transparent">
       <>
         <TextGenero>{item.genero}</TextGenero>
-        <TextQuantidade>{item.quantidade} livros</TextQuantidade>
+        <TextQuantidade>
+          {item.quantidade} {item.quantidade > 1 ? 'livros' : 'livro'}
+        </TextQuantidade>
       </>
     </Button>
   );

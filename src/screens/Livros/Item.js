@@ -38,6 +38,11 @@ const TextVolume = styled.Text`
   color: ${COLORS.black};
   margin-left: 5px;
 `;
+const TextGenero = styled.Text`
+  font-size: 14px;
+  color: ${COLORS.black};
+  margin-left: 5px;
+`;
 
 const Item = ({item, onPress}) => {
   //console.log(item);
@@ -48,6 +53,7 @@ const Item = ({item, onPress}) => {
         <TextDescricao>{item.descricao}</TextDescricao>
         <TextAutor>{item.autor}</TextAutor>
         <TextVolume>{item.volume}</TextVolume>
+        <TextGenero>{item.genero}</TextGenero>
       </>
     </Button>
   );

@@ -1,4 +1,5 @@
-import React, {createContext, useEffect, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {createContext, useState, useContext, useEffect} from 'react';
 import {ToastAndroid} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 
@@ -24,6 +25,7 @@ export const LivrosProvider = ({children}) => {
             autor: doc.data().autor,
             descricao: doc.data().descricao,
             volume: doc.data().volume,
+            genero: doc.data().genero,
           });
         });
         setLivros(data);
@@ -32,7 +34,7 @@ export const LivrosProvider = ({children}) => {
     return () => {
       listener();
     };
-  }, []);
+  });
 
   const saveBook = async book => {
     // console.log(book)
@@ -43,6 +45,7 @@ export const LivrosProvider = ({children}) => {
           descricao: book.descricao,
           autor: book.autor,
           volume: book.volume,
+          genero: book.genero,
         },
         {merge: true},
       );

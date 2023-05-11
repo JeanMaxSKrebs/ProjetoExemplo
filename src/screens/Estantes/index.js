@@ -29,23 +29,25 @@ const Estantes = ({navigation}) => {
   }, [navigation]);
 
   const filterEstante = text => {
-    // console.log('text');
-    // console.log(text);
-    let filtro = [];
-    // console.log(estantes);
-    estantes.filter(estante => {
-      if (estante.genero.toLowerCase().includes(text.toLowerCase())) {
-        filtro.push(estante);
-      }
-    });
-    // console.log('filtro');
-    // console.log(filtro);
-    // console.log(filtro.length);
-    if (filtro.length > 0) {
-      setEstantesTemp(filtro);
+    if (text !== '') {
+      let filtro = [];
+      // console.log(estantes);
+
+      filtro.push(
+        ...estantes.filter(est =>
+          est.genero.toLowerCase().includes(text.toLowerCase()),
+        ),
+      );
+
+      // console.log('filtro');
+      // console.log(filtro);
       // console.log(filtro.length);
-    } else {
-      setEstantesTemp([]);
+      if (filtro.length > 0) {
+        setEstantesTemp(filtro);
+        // console.log(filtro.length);
+      } else {
+        setEstantesTemp([]);
+      }
     }
   };
 
