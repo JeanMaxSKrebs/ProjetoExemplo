@@ -11,7 +11,7 @@ const ForgotPassword = ({navigation}) => {
   const recover = () => {
     if (email !== '') {
       // alert('email')
-      console.log(email);
+      // console.log(email);
       auth()
         .sendPasswordResetEmail(email)
         .then(() => {

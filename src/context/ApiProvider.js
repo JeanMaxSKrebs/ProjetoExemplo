@@ -6,7 +6,8 @@ export const ApiContext = createContext({});
 
 export const ApiProvider = ({children}) => {
   const [api, setApi] = useState(null);
-
+  // console.log('api');
+  // console.log(api);
   const getApi = () => {
     if (auth().currentUser) {
       auth()
@@ -26,6 +27,8 @@ export const ApiProvider = ({children}) => {
               }
             });
             //coloca no state
+            // console.log('apiLocal');
+            // console.log(apiLocal);
             setApi(apiLocal);
           }
         })
@@ -36,7 +39,13 @@ export const ApiProvider = ({children}) => {
   };
 
   useEffect(() => {
-    getApi();
+    // cria um listener para o estado da sessão
+    const unsubscriber = auth().onAuthStateChanged(authUser => {
+      if (authUser) {
+        getApi();
+      }
+    });
+    return unsubscriber; //unsubscribe o listener ao desmontar
   }, []);
 
   return (

@@ -4,22 +4,22 @@ import {COLORS} from '../../assets/colors';
 
 const Button = styled.TouchableHighlight`
   width: 100%;
-  height: 100px;
-  background-color: ${COLORS.primaryLight};
-  padding: 20px;
+  height: auto;
+  background-color: ${COLORS.primary};
+  padding: 30px;
   margin-top: 10px;
-  border-radius: 10px;
+  border-radius: 20px;
 `;
 
 const TextGenero = styled.Text`
   font-size: 24px;
-  color: ${COLORS.white};
+  color: ${COLORS.black};
 `;
 
 const TextQuantidade = styled.Text`
   font-size: 16px;
   text-align: justify;
-  color: ${COLORS.white};
+  color: ${COLORS.black};
 `;
 
 const Item = ({item, onPress}) => {
@@ -28,7 +28,7 @@ const Item = ({item, onPress}) => {
     <Button onPress={onPress} underlayColor="transparent">
       <>
         <TextGenero>{item.genero}</TextGenero>
-        <TextQuantidade>{item.quantidade}</TextQuantidade>
+        <TextQuantidade>{item.quantidade} livros</TextQuantidade>
       </>
     </Button>
   );

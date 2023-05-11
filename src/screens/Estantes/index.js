@@ -12,8 +12,8 @@ import {EstantesContext} from '../../context/EstantesProvider';
 import SearchBar from '../../components/SearchBar';
 
 const Estantes = ({navigation}) => {
-  const {shelves} = useContext(EstantesContext);
-  const [shelvesTemp, setShelvesTemp] = useState([]);
+  const {estantes} = useContext(EstantesContext);
+  const [estantesTemp, setEstantesTemp] = useState([]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -29,9 +29,11 @@ const Estantes = ({navigation}) => {
   }, [navigation]);
 
   const filterEstante = text => {
+    // console.log('text');
     // console.log(text);
     let filtro = [];
-    shelves.filter(estante => {
+    // console.log(estantes);
+    estantes.filter(estante => {
       if (estante.genero.toLowerCase().includes(text.toLowerCase())) {
         filtro.push(estante);
       }
@@ -40,10 +42,10 @@ const Estantes = ({navigation}) => {
     // console.log(filtro);
     // console.log(filtro.length);
     if (filtro.length > 0) {
-      setShelvesTemp(filtro);
+      setEstantesTemp(filtro);
       // console.log(filtro.length);
     } else {
-      setShelvesTemp([]);
+      setEstantesTemp([]);
     }
   };
 
@@ -63,16 +65,18 @@ const Estantes = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <SearchBar setSearch={filterEstante} name={'Estantes'} />
+      <SearchBar search={filterEstante} name={'Estantes'} />
       <Image
         source={require('../../assets/images/estante.png')}
         accessibilityLabel="logo do app"
       />
       <Container>
-        {console.log(shelves)}
-        {console.log(shelvesTemp)}
+        {/* {console.log('estantes')}
+        {console.log(estantes)}
+        {console.log('estantesTemp')}
+        {console.log(estantesTemp)} */}
         <FlatList
-          data={shelvesTemp.length > 0 ? shelvesTemp : shelves}
+          data={estantesTemp.length > 0 ? estantesTemp : estantes}
           renderItem={renderItem}
           keyExtractor={item => item.uid}
         />

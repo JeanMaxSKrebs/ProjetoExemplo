@@ -19,7 +19,7 @@ const Livro = ({route, navigation}) => {
   // console.log(route.params)
 
   useEffect(() => {
-    console.log(route.params.value);
+    // console.log(route.params.value);
     if (route.params.value === null) {
       setNome('');
       setDescricao('');
@@ -36,7 +36,7 @@ const Livro = ({route, navigation}) => {
     }
 
     return () => {
-      console.log('desmontou Livro');
+      // console.log('desmontou Livro');
     };
   }, [route]);
 

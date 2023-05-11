@@ -14,7 +14,7 @@ const Estante = ({route, navigation}) => {
   const {saveShelf, updateShelf, deleteShelf} = useContext(EstantesContext);
 
   useEffect(() => {
-    console.log(route.params.value);
+    // console.log(route.params.value);
     if (route.params.value) {
       setGenero(route.params.value.genero);
       setQuantidade(route.params.value.quantidade);

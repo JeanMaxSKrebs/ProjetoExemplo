@@ -21,7 +21,7 @@ const SignUp = ({navigation}) => {
           setLoading(true);
           await auth().createUserWithEmailAndPassword(email, senha);
           let userFirebase = auth().currentUser;
-          console.log(userFirebase);
+          // console.log(userFirebase);
           let user = {};
           user.nome = nome;
           user.email = email;

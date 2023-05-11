@@ -10,7 +10,7 @@ export const Container = styled.SafeAreaView`
 export const TextInput = styled.TextInput`
   width: 95%;
   height: 50px;
-  border-bottom-color: ${COLORS.grey};
+  border-bottom-color: ${COLORS.gray};
   border-bottom-width: 2px;
   font-size: 16px;
   padding-left: 2px;

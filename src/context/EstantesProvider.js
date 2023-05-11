@@ -7,18 +7,17 @@ import {ApiContext} from './ApiProvider';
 export const EstantesContext = createContext({});
 
 export const EstanteProvider = ({children}) => {
-  const [shelves, setShelves] = useState([]);
+  const [estantes, setEstantes] = useState([]);
   const [errorMessage, setErrorMessage] = useState({});
   const {api} = useContext(ApiContext);
-
+  // console.log('api1');
   // console.log(api);
 
   useEffect(() => {
-    console.log('api');
-    console.log(api);
     if (api) {
       getShelves();
-      console.log(shelves);
+      // console.log('api2');
+      // console.log(estantes);
     }
   }, [api]);
 
@@ -28,12 +27,12 @@ export const EstanteProvider = ({children}) => {
 
   const getShelves = async () => {
     try {
-      console.log('api');
-      console.log(api);
+      // console.log('api3');
+      // console.log(api);
       const response = await api.get('/estantes');
-      console.log('Dados buscados via API');
-      console.log(response.data);
-      console.log(response.data.documents);
+      // console.log('Dados buscados via API');
+      // console.log(response.data);
+      // console.log(response.data.documents);
       let data = [];
       response.data.documents.map(d => {
         let k = d.name.split(
@@ -46,8 +45,7 @@ export const EstanteProvider = ({children}) => {
           uid: k[1],
         });
       });
-      data.sort((a, b) => b.nome.localeCompare(a.nome));
-      setShelves(data);
+      setEstantes(data);
     } catch (response) {
       setErrorMessage(response);
       console.log('Erro ao buscar via API.');
@@ -66,10 +64,12 @@ export const EstanteProvider = ({children}) => {
       });
       showToast('Dados salvos.');
       getShelves();
+      return true;
     } catch (response) {
       setErrorMessage(response);
-      console.log('Erro ao saveEstante via API.');
-      console.log(response);
+      console.error('Erro ao saveEstante via API.');
+      console.error(response);
+      return false;
     }
   };
 
@@ -84,10 +84,12 @@ export const EstanteProvider = ({children}) => {
       });
       showToast('Dados salvos.');
       getShelves();
+      return true;
     } catch (response) {
       setErrorMessage(response);
-      console.log('Erro ao updateEstante via API.');
-      console.log(response);
+      console.error('Erro ao updateEstante via API.');
+      console.error(response);
+      return false;
     }
   };
 
@@ -96,17 +98,19 @@ export const EstanteProvider = ({children}) => {
       await api.delete('/estantes/' + val);
       showToast('Estante excluída.');
       getShelves();
+      return true;
     } catch (response) {
       setErrorMessage(response);
       console.log('Erro ao deleteEstante via API.');
       console.log(response);
+      return false;
     }
   };
 
   return (
     <EstantesContext.Provider
       value={{
-        shelves,
+        estantes,
         saveShelf,
         updateShelf,
         deleteShelf,
