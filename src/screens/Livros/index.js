@@ -10,9 +10,13 @@ import AddFloatButton from '../../components/AddFloatButton';
 import {CommonActions} from '@react-navigation/native';
 import SearchBar from '../../components/SearchBar';
 
+import {EstantesContext} from '../../context/EstantesProvider';
+
 const Livros = ({navigation}) => {
   const {livros} = useContext(LivrosContext);
   const [livrosTemp, setLivrosTemp] = useState([]);
+  const { atualizarContador } = useContext(EstantesContext);
+
 
   useEffect(() => {
     navigation.setOptions({
@@ -26,6 +30,12 @@ const Livros = ({navigation}) => {
       headerRight: () => <LogoutButton />,
     });
   }, [navigation]);
+
+  // useEffect(() => {
+  //   if(livros) {
+  //     atualizarContador();
+  //   }
+  // }, [livros])
 
   const routeLivro = item => {
     //console.log(item);
