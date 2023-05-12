@@ -6,6 +6,8 @@ import Livros from '../screens/Livros';
 import Livro from '../screens/Livro';
 import Estantes from '../screens/Estantes';
 import Estante from '../screens/Estante';
+import Generos from '../screens/Generos';
+import Genero from '../screens/Genero';
 import Home from '../screens/Home';
 import Preload from '../screens/Preload';
 import SignUp from '../screens/SignUp';
@@ -69,6 +71,15 @@ const AppStack = () => (
         tabBarIcon: () => <Icon name="library" color={COLORS.primaryDark} />,
       }}
     />
+        <Tab.Screen
+      component={Generos}
+      name="Generos"
+      options={{
+        tabBarLabel: 'Generos',
+        // eslint-disable-next-line react/no-unstable-nested-components
+        tabBarIcon: () => <Icon name="library" color={COLORS.primaryDark} />,
+      }}
+    />
   </Tab.Navigator>
 );
 
@@ -84,6 +95,7 @@ const Navigator = () => (
       <Stack.Screen component={AppStack} name="AppStack" />
       <Stack.Screen component={Livro} name="Livro" />
       <Stack.Screen component={Estante} name="Estante" />
+      <Stack.Screen component={Genero} name="Genero" />
     </Stack.Navigator>
   </NavigationContainer>
 );

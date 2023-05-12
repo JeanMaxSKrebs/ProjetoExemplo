@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {createContext, useState, useContext, useEffect} from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
-import {ToastAndroid} from 'react-native';
+import { ToastAndroid } from 'react-native';
 
-import {ApiContext} from './ApiProvider';
+import { ApiContext } from './ApiProvider';
 
 export const EstantesContext = createContext({});
 
-export const EstanteProvider = ({children}) => {
+export const EstanteProvider = ({ children }) => {
   const [estantes, setEstantes] = useState([]);
   const [errorMessage, setErrorMessage] = useState({});
-  const {api} = useContext(ApiContext);
+  const { api } = useContext(ApiContext);
   // console.log('api1');
   // console.log(api);
 
@@ -27,44 +27,39 @@ export const EstanteProvider = ({children}) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   };
 
+  const excluirTodasEstantes = async () => {
+    try {
+      console.log(estantes);
+      
+      for (const estante of estantes) {
+        await deleteShelf(estante.uid)
+        console.log(`Coleção de estantes com ID ${estante.uid} excluída com sucesso.`);
+      }
+  
+    } catch (error) {
+      console.error('Erro ao excluir todas as coleções de estantes:', error);
+    }
+  };
+
   const atualizarContador = async () => {
     try {
-      const responseLivros = await api.get('/livros');
-      // console.log('Dados buscados via API');
-      // console.log(responseLivros.data);
-      // console.log(responseLivros.data.documents);
-      let stringGeneros = [];
-      responseLivros.data.documents.map(d => {
-        let k = d.name.split(
-          'projects/pdm-aulas-71f86/databases/(default)/documents/livros/',
-        );
+      console.log('delete')
+      await excluirTodasEstantes()
 
-        console.log(d.fields.genero.stringValue);
-        stringGeneros.push(d.fields.genero.stringValue);
-      });
-      console.log('stringGeneros');
-      console.log(stringGeneros);
-
-      const quantidadePorGenero = {};
-      stringGeneros.forEach(genero => {
-        if (quantidadePorGenero[genero]) {
-          quantidadePorGenero[genero]++;
-        } else {
-          quantidadePorGenero[genero] = 1;
-        }
-      });
-
-      console.log('Quantidade por nome:', quantidadePorGenero);
+      let quantidadePorGenero = await obterQuantidadePorGenero();
+      // console.log(quantidadePorGenero);
 
       Object.keys(quantidadePorGenero).forEach(async genero => {
         try {
+          // console.log(genero);
+          // console.log(quantidadePorGenero[genero]);
           const quantidade = quantidadePorGenero[genero].toString();
 
           console.log(genero);
           await api.post('/estantes/', {
             fields: {
-              genero: {stringValue: genero},
-              quantidade: {stringValue: quantidade},
+              genero: { stringValue: genero },
+              quantidade: { stringValue: quantidade },
             },
           });
 
@@ -79,6 +74,37 @@ export const EstanteProvider = ({children}) => {
       setErrorMessage(response);
       console.log('Erro ao buscar via API.');
       console.log(response);
+    }
+  };
+
+  const obterQuantidadePorGenero = async () => {
+    try {
+      const responseLivros = await api.get('/livros');
+      let stringGeneros = [];
+      responseLivros.data.documents.map(d => {
+        let k = d.name.split(
+          'projects/pdm-aulas-71f86/databases/(default)/documents/livros/',
+        );
+  
+        // console.log(d.fields.genero.stringValue);
+        stringGeneros.push(d.fields.genero.stringValue);
+      });
+      // console.log('stringGeneros');
+      // console.log(stringGeneros);
+  
+      const quantidadePorGenero = {};
+      stringGeneros.forEach(genero => {
+        if (quantidadePorGenero[genero]) {
+          quantidadePorGenero[genero]++;
+        } else {
+          quantidadePorGenero[genero] = 1;
+        }
+      });
+  
+      console.log('Quantidade por nome:', quantidadePorGenero);
+      return quantidadePorGenero;
+    } catch (error) {
+      console.error('Erro ao obter a quantidade por genero:', error);
     }
   };
 
@@ -102,6 +128,7 @@ export const EstanteProvider = ({children}) => {
           uid: k[1],
         });
       });
+      // console.log(data)
       setEstantes(data);
     } catch (response) {
       setErrorMessage(response);
@@ -115,8 +142,8 @@ export const EstanteProvider = ({children}) => {
     try {
       await api.post('/estantes/', {
         fields: {
-          genero: {stringValue: val.genero},
-          quantidade: {stringValue: val.quantidade},
+          genero: { stringValue: val.genero },
+          quantidade: { stringValue: val.quantidade },
         },
       });
       showToast('Dados salvos.');
@@ -135,8 +162,8 @@ export const EstanteProvider = ({children}) => {
     try {
       await api.patch('/estantes/' + val.uid, {
         fields: {
-          genero: {stringValue: val.genero},
-          quantidade: {stringValue: val.quantidade},
+          genero: { stringValue: val.genero },
+          quantidade: { stringValue: val.quantidade },
         },
       });
       showToast('Dados salvos.');
@@ -152,6 +179,7 @@ export const EstanteProvider = ({children}) => {
 
   const deleteShelf = async val => {
     try {
+      console.log(val)
       await api.delete('/estantes/' + val);
       showToast('Estante excluída.');
       getShelves();
@@ -168,6 +196,7 @@ export const EstanteProvider = ({children}) => {
     <EstantesContext.Provider
       value={{
         estantes,
+        atualizarContador,
         saveShelf,
         updateShelf,
         deleteShelf,

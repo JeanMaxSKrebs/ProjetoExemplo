@@ -8,19 +8,19 @@ import {Container, FlatList} from './styles';
 import Item from './Item.js';
 import AddFloatButton from '../../components/AddFloatButton';
 // import Loading from '../../components/Loading';
-import {EstantesContext} from '../../context/EstantesProvider';
+import {GenerosContext} from '../../context/GenerosProvider';
 import SearchBar from '../../components/SearchBar';
 
-const Estantes = ({navigation}) => {
-  const {estantes} = useContext(EstantesContext);
-  const [estantesTemp, setEstantesTemp] = useState([]);
+const Generos = ({navigation}) => {
+  const {generos} = useContext(GenerosContext);
+  const [generosTemp, setGenerosTemp] = useState([]);
 
   useEffect(() => {
     navigation.setOptions({
       // headerLeft: false,
       headerTitleAlign: 'center',
       // name: 'GERENCIA LIVROS',
-      title: 'BIBLIOTECA // ESTANTES', // deixei a name pq senao muda o nome da tab
+      title: 'BIBLIOTECA // GÊNEROS', // deixei a name pq senao muda o nome da tab
       headerStyle: {backgroundColor: COLORS.primaryDark},
       headerTintColor: {color: COLORS.black},
       // eslint-disable-next-line react/no-unstable-nested-components
@@ -28,14 +28,14 @@ const Estantes = ({navigation}) => {
     });
   }, [navigation]);
 
-  const filterEstante = text => {
+  const filterGenero = text => {
     if (text !== '') {
       let filtro = [];
-      // console.log(estantes);
+      // console.log(generos);
 
       filtro.push(
-        ...estantes.filter(est =>
-          est.genero.toLowerCase().includes(text.toLowerCase()),
+        ...generos.filter(est =>
+          est.nome.toLowerCase().includes(text.toLowerCase()),
         ),
       );
 
@@ -43,53 +43,51 @@ const Estantes = ({navigation}) => {
       // console.log(filtro);
       // console.log(filtro.length);
       if (filtro.length > 0) {
-        setEstantesTemp(filtro);
+        setGenerosTemp(filtro);
         // console.log(filtro.length);
       } else {
-        setEstantesTemp([]);
+        setGenerosTemp([]);
       }
     }
   };
 
-  const routeEstante = item => {
+  const routeGenero = item => {
     //console.log(item);
     navigation.dispatch(
       CommonActions.navigate({
-        name: 'Estante',
+        name: 'Genero',
         params: {value: item},
       }),
     );
   };
 
   const renderItem = ({item}) => (
-    <Item item={item}
-    //  onPress={() => routeEstante(item)}
-      />
+    <Item item={item} onPress={() => routeGenero(item)} />
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      <SearchBar search={filterEstante} name={'Estantes'} />
+      <SearchBar search={filterGenero} name={'Gêneros'} />
       <Image
         source={require('../../assets/images/estante.png')}
         accessibilityLabel="logo do app"
       />
       <Container>
-        {/* {console.log('estantes')}
-        {console.log(estantes)}
-        {console.log('estantesTemp')}
-        {console.log(estantesTemp)} */}
+        {/* {console.log('generos')}
+        {console.log(generos)}
+        {console.log('generosTemp')}
+        {console.log(generosTemp)} */}
         <FlatList
-          data={estantesTemp.length > 0 ? estantesTemp : estantes}
+          data={generosTemp.length > 0 ? generosTemp : generos}
           renderItem={renderItem}
           keyExtractor={item => item.uid}
         />
       </Container>
-      {/* <AddFloatButton onClick={() => routeEstante(null)} /> */}
+      <AddFloatButton onClick={() => routeGenero(null)} />
     </SafeAreaView>
   );
 };
-export default Estantes;
+export default Generos;
 
 const styles = StyleSheet.create({
   container: {

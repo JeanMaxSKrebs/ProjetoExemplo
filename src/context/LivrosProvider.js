@@ -2,11 +2,13 @@
 import React, {createContext, useState, useContext, useEffect} from 'react';
 import {ToastAndroid} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import { EstantesContext } from './EstantesProvider';
 
 export const LivrosContext = createContext({});
 
 export const LivrosProvider = ({children}) => {
   const [livros, setLivros] = useState([]);
+  const { atualizarContador } = useContext(EstantesContext);
 
   const showToast = message => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
@@ -34,6 +36,8 @@ export const LivrosProvider = ({children}) => {
     return () => {
       listener();
     };
+
+    
   });
 
   const saveBook = async book => {
@@ -49,6 +53,7 @@ export const LivrosProvider = ({children}) => {
         },
         {merge: true},
       );
+      atualizarContador();
       return true;
     } catch (error) {
       console.error('BookProvider, saveBook: ', error);
@@ -63,6 +68,7 @@ export const LivrosProvider = ({children}) => {
       .delete()
       .then(() => {
         showToast('Livro excluído.');
+        atualizarContador();
       })
       .catch(error => {
         console.error('BookProvider, deleteBook: ', error);

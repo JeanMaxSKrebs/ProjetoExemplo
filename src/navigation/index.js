@@ -4,6 +4,7 @@ import {AuthUserProvider} from '../context/AuthUserProvider';
 import Navigator from './Navigator';
 import {ApiProvider} from '../context/ApiProvider';
 import {EstanteProvider} from '../context/EstantesProvider';
+import {GeneroProvider} from '../context/GenerosProvider';
 import Estantes from '../screens/Estantes';
 
 export default function Providers() {
@@ -11,9 +12,11 @@ export default function Providers() {
     <AuthUserProvider>
       <ApiProvider>
         <EstanteProvider>
-          <LivrosProvider>
-            <Navigator />
-          </LivrosProvider>
+          <GeneroProvider>
+            <LivrosProvider>
+              <Navigator />
+            </LivrosProvider>
+            </GeneroProvider>
         </EstanteProvider>
       </ApiProvider>
     </AuthUserProvider>
