@@ -1,82 +1,119 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {createContext, useState, useContext, useEffect} from 'react';
 import {ToastAndroid} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import { EstantesContext } from './EstantesProvider';
+// import {EstantesContext} from './EstantesProvider';
+import {ApiContext} from './ApiProvider';
 
 export const LivrosContext = createContext({});
 
 export const LivrosProvider = ({children}) => {
   const [livros, setLivros] = useState([]);
-  const { atualizarContador } = useContext(EstantesContext);
+  const [errorMessage, setErrorMessage] = useState({});
+  // const {atualizarContador} = useContext(EstantesContext);
 
   const showToast = message => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   };
 
+  const {api} = useContext(ApiContext);
+  // console.log('api1');
+  // console.log(api);
+
   useEffect(() => {
-    const listener = firestore()
-      .collection('livros')
-      .orderBy('nome')
-      .onSnapshot(snapShot => {
-        let data = [];
-        snapShot.forEach(doc => {
-          data.push({
-            uid: doc.id,
-            nome: doc.data().nome,
-            autor: doc.data().autor,
-            descricao: doc.data().descricao,
-            volume: doc.data().volume,
-            genero: doc.data().genero,
-          });
-        });
-        setLivros(data);
-      });
+    if (api) {
+      getLivros();
+      console.log('livros');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [api]);
 
-    return () => {
-      listener();
-    };
-
-    
-  });
-
-  const saveBook = async book => {
-    // console.log(book)
+  const getLivros = async () => {
     try {
-      await firestore().collection('livros').doc(book.uid).set(
-        {
-          nome: book.nome,
-          descricao: book.descricao,
-          autor: book.autor,
-          volume: book.volume,
-          genero: book.genero,
+      const response = await api.get('/users');
+      // console.log('Dados buscados via API');
+      // console.log(response.data);
+      console.log(response.data.documents);
+      let data = [];
+      response.data.documents.map(d => {
+        // console.log(d.name);
+        let k = d.name.split(
+          'projects/pdm-aulas-71f86/databases/(default)/documents/users/',
+        );
+        // console.log('k');
+        // console.log(k);
+
+        data.push({
+          nome: d.fields.nome.stringValue,
+          // descricao: d.fields.descricao.stringValue,
+          // autor: d.fields.autor.stringValue,
+          // volume: d.fields.volume.stringValue,
+          // genero: d.fields.genero.stringValue,
+          uid: k[1],
+        });
+        console.log(k[1]);
+      });
+      setLivros(data);
+    } catch (response) {
+      setErrorMessage(response);
+      console.log('Erro ao buscar via API.');
+      console.log(response);
+    }
+  };
+  const saveBook = async val => {
+    console.log('val');
+    console.log(val);
+    try {
+      await api.post('/users/', {
+        fields: {
+          nome: {stringValue: val.nome},
         },
-        {merge: true},
-      );
-      atualizarContador();
+      });
+      showToast('Dados salvos.');
+      getLivros();
       return true;
-    } catch (error) {
-      console.error('BookProvider, saveBook: ', error);
+    } catch (response) {
+      setErrorMessage(response);
+      console.error('Erro ao saveBook via API.');
+      console.error(response);
       return false;
     }
   };
 
-  const deleteBook = async uid => {
-    await firestore()
-      .collection('livros')
-      .doc(uid)
-      .delete()
-      .then(() => {
-        showToast('Livro excluído.');
-        atualizarContador();
-      })
-      .catch(error => {
-        console.error('BookProvider, deleteBook: ', error);
+  const updateLivro = async val => {
+    //console.log(val);
+    try {
+      await api.patch('/livros/' + val.uid, {
+        fields: {
+          nome: {stringValue: val.nome},
+        },
       });
+      showToast('Dados salvos.');
+      getLivros();
+      return true;
+    } catch (response) {
+      setErrorMessage(response);
+      console.error('Erro ao updateLivro via API.');
+      console.error(response);
+      return false;
+    }
+  };
+
+  const deleteBook = async val => {
+    try {
+      await api.delete('/livros/' + val);
+      showToast('Livro excluído.');
+      getLivros();
+      return true;
+    } catch (response) {
+      setErrorMessage(response);
+      console.log('Erro ao deletar Livro via API.');
+      console.log(response);
+      return false;
+    }
   };
 
   return (
-    <LivrosContext.Provider value={{livros, saveBook, deleteBook}}>
+    <LivrosContext.Provider value={{livros, saveBook, updateLivro, deleteBook}}>
       {children}
     </LivrosContext.Provider>
   );

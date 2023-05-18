@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Alert, ToastAndroid} from 'react-native';
 import {Container, TextInput} from './styles';
-import MyButtom from '../../components/MeuButton';
+import MeuButton from '../../components/MeuButton';
 import DeleteButton from '../../components/DeleteButton';
 import Loading from '../../components/Loading';
 import {EstantesContext} from '../../context/EstantesProvider';
@@ -97,7 +97,7 @@ const Estante = ({route, navigation}) => {
         onChangeText={t => setQuantidade(t)}
         value={quantidade}
       />
-      <MyButtom texto="Salvar" onClick={salvar} />
+      <MeuButton texto="Salvar" onClick={salvar} />
       {uid ? <DeleteButton texto="Excluir" onClick={excluir} /> : null}
       {loading && <Loading />}
     </Container>

@@ -13,18 +13,18 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.red,
+    backgroundColor: COLORS.accentSeccundary,
     padding: 10,
     margin: 10,
     borderRadius: 5,
   },
 });
 
-const DeleteButton = ({texto, onClick}) => {
+const UpdateButton = ({texto, onClick}) => {
   return (
     <TouchableHighlight style={styles.button} onPress={() => onClick()}>
       <Text style={styles.texto}>{texto}</Text>
     </TouchableHighlight>
   );
 };
-export default DeleteButton;
+export default UpdateButton;

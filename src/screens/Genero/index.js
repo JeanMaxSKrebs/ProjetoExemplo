@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Alert, ToastAndroid} from 'react-native';
 import {Container, TextInput} from './styles';
-import MyButtom from '../../components/MeuButton';
+import MeuButton from '../../components/MeuButton';
 import DeleteButton from '../../components/DeleteButton';
 import Loading from '../../components/Loading';
 import {GenerosContext} from '../../context/GenerosProvider';
@@ -15,8 +15,8 @@ const Genero = ({route, navigation}) => {
   useEffect(() => {
     // console.log(route.params.value);
     if (route.params.value) {
-        setNome(route.params.value.nome);
-        setUid(route.params.value.uid);
+      setNome(route.params.value.nome);
+      setUid(route.params.value.uid);
     }
   }, [route]);
 
@@ -87,7 +87,7 @@ const Genero = ({route, navigation}) => {
         onChangeText={t => setNome(t)}
         value={nome}
       />
-      <MyButtom texto="Salvar" onClick={salvar} />
+      <MeuButton texto="Salvar" onClick={salvar} />
       {uid ? <DeleteButton texto="Excluir" onClick={excluir} /> : null}
       {loading && <Loading />}
     </Container>

@@ -16,8 +16,8 @@ export const EstanteProvider = ({children}) => {
 
   useEffect(() => {
     if (api) {
-      console.log("contador");
-      atualizarContador();
+      // console.log("contador");
+      // atualizarContador();
       getShelves();
       // console.log('api2');
       // console.log(estantes);

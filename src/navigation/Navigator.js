@@ -15,6 +15,9 @@ import ForgotPassword from '../screens/ForgotPassword';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import Menu from '../screens/Menu';
+import PerfilUsuario from '../screens/PerfilUsuario';
+
 import {COLORS} from '../assets/colors';
 import {StyleSheet, StatusBar} from 'react-native';
 
@@ -71,13 +74,22 @@ const AppStack = () => (
         tabBarIcon: () => <Icon name="library" color={COLORS.primaryDark} />,
       }}
     />
-        <Tab.Screen
+    <Tab.Screen
       component={Generos}
       name="Generos"
       options={{
         tabBarLabel: 'Generos',
         // eslint-disable-next-line react/no-unstable-nested-components
         tabBarIcon: () => <Icon name="library" color={COLORS.primaryDark} />,
+      }}
+    />
+    <Tab.Screen
+      component={Menu}
+      name="Menu"
+      options={{
+        tabBarLabel: 'Menu',
+        // eslint-disable-next-line react/no-unstable-nested-components
+        tabBarIcon: () => <Icon name="list" color={COLORS.primaryDark} />,
       }}
     />
   </Tab.Navigator>
@@ -96,6 +108,13 @@ const Navigator = () => (
       <Stack.Screen component={Livro} name="Livro" />
       <Stack.Screen component={Estante} name="Estante" />
       <Stack.Screen component={Genero} name="Genero" />
+      <Stack.Screen
+        component={PerfilUsuario}
+        name="PerfilUsuario"
+        options={{
+          presentation: 'modal',
+        }}
+      />
     </Stack.Navigator>
   </NavigationContainer>
 );

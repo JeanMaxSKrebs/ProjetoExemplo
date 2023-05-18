@@ -5,19 +5,21 @@ import Navigator from './Navigator';
 import {ApiProvider} from '../context/ApiProvider';
 import {EstanteProvider} from '../context/EstantesProvider';
 import {GeneroProvider} from '../context/GenerosProvider';
-import Estantes from '../screens/Estantes';
+import {ProfileProvider} from '../context/ProfileProvider';
 
 export default function Providers() {
   return (
     <AuthUserProvider>
       <ApiProvider>
-        <EstanteProvider>
-          <GeneroProvider>
-            <LivrosProvider>
-              <Navigator />
-            </LivrosProvider>
+        <ProfileProvider>
+          <EstanteProvider>
+            <GeneroProvider>
+              <LivrosProvider>
+                <Navigator />
+              </LivrosProvider>
             </GeneroProvider>
-        </EstanteProvider>
+          </EstanteProvider>
+        </ProfileProvider>
       </ApiProvider>
     </AuthUserProvider>
   );
