@@ -1,22 +1,22 @@
-import React, {useEffect, useContext, useState} from 'react';
-import {SafeAreaView, ScrollView, View, Text, StyleSheet} from 'react-native';
-import {COLORS} from '../../assets/colors';
+import React, { useEffect, useContext, useState } from 'react';
+import { SafeAreaView, ScrollView, View, Text, StyleSheet } from 'react-native';
+import { COLORS } from '../../assets/colors';
 import LogoutButton from '../../components/LogoutButton';
-import {LivrosContext} from '../../context/LivrosProvider';
-import {Image} from '../Preload/styles';
+import { LivrosContext } from '../../context/LivrosProvider';
+import { Image } from '../Preload/styles';
 import Item from './Item';
 import AddFloatButton from '../../components/AddFloatButton';
+import { Container, FlatList } from './styles';
 
-import {CommonActions} from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 import SearchBar from '../../components/SearchBar';
 
-import {EstantesContext} from '../../context/EstantesProvider';
+import { EstantesContext } from '../../context/EstantesProvider';
 
-const Livros = ({navigation}) => {
-  const {livros} = useContext(LivrosContext);
+const Livros = ({ navigation }) => {
+  const { livros, getLivros} = useContext(LivrosContext);
   const [livrosTemp, setLivrosTemp] = useState([]);
   const { atualizarContador } = useContext(EstantesContext);
-
 
   useEffect(() => {
     navigation.setOptions({
@@ -24,25 +24,21 @@ const Livros = ({navigation}) => {
       headerTitleAlign: 'center',
       // name: 'GERENCIA LIVROS',
       title: 'BIBLIOTECA // LIVROS', // deixei a name pq senao muda o nome da tab
-      headerStyle: {backgroundColor: COLORS.primaryDark},
-      headerTintColor: {color: COLORS.black},
+      headerStyle: { backgroundColor: COLORS.primaryDark },
+      headerTintColor: { color: COLORS.black },
       // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => <LogoutButton />,
     });
+    getLivros();
   }, [navigation]);
 
-  // useEffect(() => {
-  //   if(livros) {
-  //     atualizarContador();
-  //   }
-  // }, [livros])
 
   const routeLivro = item => {
     //console.log(item);
     navigation.dispatch(
       CommonActions.navigate({
         name: 'Livro',
-        params: {value: item},
+        params: { value: item },
       }),
     );
   };
@@ -65,6 +61,10 @@ const Livros = ({navigation}) => {
     }
   };
 
+  const renderItem = ({ item }) => (
+    <Item item={item} onPress={() => routeLivro(item)} />
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <SearchBar search={filterLivro} name={'Livros'} />
@@ -73,32 +73,24 @@ const Livros = ({navigation}) => {
         source={require('../../assets/images/logo.png')}
         accessibilityLabel="logo do app"
       />
-      <ScrollView>
-        <Text style={styles.texto}> Coleções dos Livros </Text>
-        <View style={styles.container}>
-          {livrosTemp.length > 0
-            ? livrosTemp.map((valor, key) => {
-                return (
-                  <Item
-                    item={valor}
-                    onPress={() => routeLivro(valor)}
-                    key={key}
-                  />
-                );
-              })
-            : livros.map((valor, key) => {
-                return (
-                  <Item
-                    item={valor}
-                    onPress={() => routeLivro(valor)}
-                    key={key}
-                  />
-                );
-              })}
-        </View>
-      </ScrollView>
+      {/* <ScrollView> */}
+      <Text style={styles.texto}> Coleções dos Livros </Text>
+      {console.log('container')}
+
+      <Container>
+        {/* {console.log('livros')}
+        {console.log(livros.length)}
+        {console.log('livrosTemp')}
+        {console.log(livrosTemp.length)} */}
+        <FlatList
+          data={livrosTemp.length > 0 ? livrosTemp : livros}
+          renderItem={renderItem}
+          keyExtractor={item => item.uid}
+        />
+      </Container>
+      {/* </ScrollView > */}
       <AddFloatButton onClick={() => routeLivro(null)} />
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 

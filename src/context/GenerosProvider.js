@@ -45,10 +45,11 @@ export const GeneroProvider = ({children}) => {
           uid: k[1],
         });
       });
+      // console.log(data)
       setGeneros(data);
     } catch (response) {
       setErrorMessage(response);
-      console.log('Erro ao buscar via API.');
+      console.log('Erro ao buscar generos via API.');
       console.log(response);
     }
   };

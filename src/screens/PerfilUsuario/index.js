@@ -194,7 +194,7 @@ const PerfilUsuario = ({navigation}) => {
         returnKeyType="next"
         onChangeText={t => setNePassConfirm(t)}
       />
-      <MeuButton text="Salvar" onClick={salvar} />
+      <MeuButton texto="Salvar" onClick={salvar} />
       <DeleteButton texto="Excluir Conta" onClick={excluir} />
       <DeleteButton texto="Alterar Senha" onClick={alterarSenha} />
       {loading && <Loading />}

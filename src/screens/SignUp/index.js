@@ -1,71 +1,48 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Alert} from 'react-native';
-import MeuButton from '../../components/MeuButton';
 import {Body, TextInput} from './styles';
-import auth from '@react-native-firebase/auth';
-import {CommonActions} from '@react-navigation/native';
-import firestore from '@react-native-firebase/firestore';
+import MeuButton from '../../components/MeuButton';
 import Loading from '../../components/Loading';
+import {AuthUserContext} from '../../context/AuthUserProvider';
 
 const SignUp = ({navigation}) => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [confirmaSenha, setConfirmaSenha] = useState('');
+  const [confirmSenha, setConfirmSenha] = useState('');
   const [loading, setLoading] = useState(false);
+  const {signUp} = useContext(AuthUserContext);
 
-  const cadastrar = async () => {
-    if (nome !== '' && email !== '' && senha !== '' && confirmaSenha !== '') {
-      if (senha === confirmaSenha) {
-        try {
-          setLoading(true);
-          await auth().createUserWithEmailAndPassword(email, senha);
-          let userFirebase = auth().currentUser;
-          // console.log(userFirebase);
-          let user = {};
-          user.nome = nome;
-          user.email = email;
-          // console.log(user);
-          // console.log('SignUp Cadastrar: User Added!1');
-          await userFirebase.sendEmailVerification();
-          Alert.alert(
-            'Informação',
-            'Foi Enviado um email para: ' + email + 'para verificação',
-          );
-          await firestore().collection('users').doc(userFirebase.uid).set(user);
-          // console.log('SignUp Cadastrar: User Added!1');
+  const cadastar = async () => {
+    let msgError = '';
+    if (nome !== '' && email !== '' && senha !== '' && confirmSenha !== '') {
+      if (senha === confirmSenha) {
+        let user = {};
+        user.nome = nome;
+        user.email = email;
+        setLoading(true);
+        msgError = await signUp(user, senha);
+        if (msgError === 'ok') {
           setLoading(false);
-
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{name: 'SignIn'}],
-            }),
+          Alert.alert(
+            'Show!',
+            'Foi enviado um email para:\n' +
+              user.email +
+              '\nFaça a verificação.',
           );
-        } catch (e) {
-          console.log('SignUp: cadastrar:' + e);
-          switch (e.code) {
-            case 'auth/email-already-in-use':
-              Alert.alert('Erro', 'Email já esta em uso.');
-              break;
-            case 'auth/operation-not-allowed':
-              Alert.alert('Erro', 'Problemas ao fazer o cadastro.');
-              break;
-            case 'auth/invalid-email':
-              Alert.alert('Erro', 'Email Inválido.');
-              break;
-            case 'auth/weak-password':
-              Alert.alert('Erro', 'Senha Fraca. Digite uma senha Forte.');
-              break;
-          }
+          navigation.goBack();
+        } else {
+          setLoading(false);
+          Alert.alert('Ops!', msgError);
         }
       } else {
-        Alert.alert('Erro', 'As Senhas Diferem');
+        Alert.alert('Ops!', 'As senhas digitadas são diferentes.');
       }
     } else {
-      Alert.alert('Erro', 'Por Favor, preencha todos os campos');
+      Alert.alert('Ops!', 'Por favor, digite todos os campos.');
     }
   };
+
   return (
     <Body>
       <TextInput
@@ -81,23 +58,22 @@ const SignUp = ({navigation}) => {
         onChangeText={t => setEmail(t)}
       />
       <TextInput
+        secureTextEntry={true}
         placeholder="Senha"
         keyboardType="default"
         returnKeyType="next"
-        secureTextEntry={true}
         onChangeText={t => setSenha(t)}
       />
       <TextInput
+        secureTextEntry={true}
         placeholder="Confirmar Senha"
         keyboardType="default"
         returnKeyType="send"
-        secureTextEntry={true}
-        onChangeText={t => setConfirmaSenha(t)}
+        onChangeText={t => setConfirmSenha(t)}
       />
-      <MeuButton texto={'Cadastrar'} onClick={cadastrar} />
+      <MyButtom text="Cadastrar" onClick={cadastar} />
       {loading && <Loading />}
     </Body>
   );
 };
-
 export default SignUp;

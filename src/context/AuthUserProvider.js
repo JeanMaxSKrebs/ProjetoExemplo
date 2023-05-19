@@ -11,15 +11,18 @@ export const AuthUserProvider = ({children}) => {
   /*
     Cache criptografado do usuário
   */
-  async function storeUserSession(localEmail, pass) {
+  async function storeUserSession(localEmail, senha) {
     try {
+      // console.log('localEmail')
+      // console.log(localEmail)
       await EncryptedStorage.setItem(
         'user_session',
         JSON.stringify({
           email: localEmail,
-          pass,
+          senha,
         }),
       );
+      return true;
     } catch (e) {
       console.error('AuthUserProvider, storeUserSession: ' + e);
     }
@@ -37,9 +40,9 @@ export const AuthUserProvider = ({children}) => {
   /*
     Funções do processo de Autenticação
   */
-  async function signUp(localUser, pass) {
+  async function signUp(localUser, senha) {
     try {
-      await auth().createUserWithEmailAndPassword(localUser.email, pass);
+      await auth().createUserWithEmailAndPassword(localUser.email, senha);
       await auth().currentUser.sendEmailVerification();
       await firestore()
         .collection('users')
@@ -51,14 +54,16 @@ export const AuthUserProvider = ({children}) => {
     }
   }
 
-  async function signIn(email, pass) {
+  async function signIn(email, senha) {
     try {
-      await auth().signInWithEmailAndPassword(email, pass);
+      // console.log(email, senha)
+      await auth().signInWithEmailAndPassword(email, senha);
       if (!auth().currentUser.emailVerified) {
         return 'Você deve validar seu email para continuar.';
       }
-      await storeUserSession(email, pass);
-      if (await getUser(pass)) {
+      await storeUserSession(email, senha);
+      if (await getUser(senha)) {
+
         return 'ok';
       } else {
         return 'Problemas ao buscar o seu perfil. Contate o administrador.';
@@ -91,16 +96,17 @@ export const AuthUserProvider = ({children}) => {
   }
 
   //busca os detalhes do user no nó users e o armazena no state user
-  async function getUser(pass) {
+  async function getUser(senha) {
     try {
       let doc = await firestore()
         .collection('users')
         .doc(auth().currentUser.uid)
         .get();
       if (doc.exists) {
-        //console.log('Document data:', doc.data());
+        // console.log("USER")
+        // console.log('Document data:', doc.data());
         doc.data().uid = auth().currentUser.uid;
-        doc.data().pass = pass;
+        doc.data().senha = senha;
         setUser(doc.data());
         return doc.data();
       }

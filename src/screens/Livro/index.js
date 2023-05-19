@@ -73,7 +73,8 @@ const Livro = ({ route, navigation }) => {
         text: 'Sim',
         onPress: async () => {
           setLoading(true);
-          if (await deleteBook(uid)) {
+          console.log(uid, genero)
+          if (await deleteBook(uid, genero)) {
             ToastAndroid.show('Deletado', ToastAndroid.SHORT);
           } else {
             ToastAndroid.show('Digite todos os campos', ToastAndroid.SHORT);

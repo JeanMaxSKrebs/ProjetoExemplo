@@ -7,7 +7,7 @@ const Item = ({opcao, icon, onPress}) => {
   return (
     <TouchableHighlight style={styles.buttom} onPress={onPress}>
       <>
-        <Icon name={icon} color={COLORS.primary} size={28} />
+        <Icon name={icon} color={COLORS.primaryDark} size={28} />
         <Text style={styles.text}>{opcao}</Text>
       </>
     </TouchableHighlight>

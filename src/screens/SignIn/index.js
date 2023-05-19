@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {TextInput} from 'react-native';
 import {
   SafeAreaView,
@@ -16,6 +16,7 @@ import auth from '@react-native-firebase/auth';
 import {CommonActions} from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import Loading from '../../components/Loading';
+import {AuthUserContext} from '../../context/AuthUserProvider';
 
 const SignIn = ({navigation}) => {
   // console.log(app);
@@ -23,6 +24,7 @@ const SignIn = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
+  const {signIn} = useContext(AuthUserContext);
 
   const recuperarSenha = () => {
     // alert('abrir modal recuperar senha');
@@ -49,46 +51,22 @@ const SignIn = ({navigation}) => {
   };
 
   const entrar = async () => {
-    // console.log(`email: ${email} senha: ${senha}`);
+    let msgError = '';
     if (email && senha) {
-      try {
-        // console.log('entrou'),
-        // setEmail('');
-        // setSenha('');
-
-        setLoading(true);
-        await auth().signInWithEmailAndPassword(email, senha);
-        await storeUserSession(email, senha);
+      setLoading(true);
+      msgError = await signIn(email, senha);
+      if (msgError === 'ok') {
         setLoading(false);
-        if (!auth().currentUser.emailVerified) {
-          Alert.alert('Erro', 'Você deve verificar seu email para prosseguir.');
-          return;
-        }
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
             routes: [{name: 'AppStack'}],
           }),
         );
-      } catch (e) {
-        console.log('SignIn: erro em entrar:' + e);
-        switch (e.code) {
-          case 'auth/user-not-found':
-            Alert.alert('Erro', 'Usuário não encontrado.');
-            break;
-          case 'auth/wrong-password':
-            Alert.alert('Erro', 'Senha Incorreta.');
-            break;
-          case 'auth/invalid-email':
-            Alert.alert('Erro', 'Email Inválido.');
-            break;
-          case 'auth/user-disabled':
-            Alert.alert('Erro', 'Usuário Desativado.');
-            break;
-        }
+      } else {
+        setLoading(false);
+        Alert.alert('Ops!', msgError);
       }
-    } else {
-      Alert.alert('Erro', 'Por Favor, Digite Email e Senha.');
     }
   };
 
@@ -202,7 +180,6 @@ const styles = StyleSheet.create({
   hr: {
     width: '30%',
     height: 1,
-    borderBottomColor: COLORS.gray,
     borderBottomWidth: 2,
   },
   cadastrarSe: {
