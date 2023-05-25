@@ -1,20 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, {createContext, useState, useContext, useEffect} from 'react';
 
-import { ToastAndroid } from 'react-native';
+import {ToastAndroid} from 'react-native';
 
-import { ApiContext } from './ApiProvider';
-import { AuthUserContext } from './AuthUserProvider';
-import { GenerosContext } from './GenerosProvider';
+import {ApiContext} from './ApiProvider';
+import {AuthUserContext} from './AuthUserProvider';
+import {GenerosContext} from './GenerosProvider';
 
 export const EstantesContext = createContext({});
 
-export const EstanteProvider = ({ children }) => {
-  const { generos } = useContext(GenerosContext);
-  const { user, getUser } = useContext(AuthUserContext);
+export const EstanteProvider = ({children}) => {
+  const {generos} = useContext(GenerosContext);
+  const {user, getUser} = useContext(AuthUserContext);
   const [estantes, setEstantes] = useState([]);
   const [errorMessage, setErrorMessage] = useState({});
-  const { api } = useContext(ApiContext);
+  const {api} = useContext(ApiContext);
   // console.log('api1');
   // console.log(api);
 
@@ -35,33 +35,37 @@ export const EstanteProvider = ({ children }) => {
 
   const getGenres = async () => {
     try {
-      console.log('user')
-      console.log(user)
+      console.log('user');
+      console.log(user);
+      let data = [];
+      let id = 0;
       for (const genero of generos) {
         // console.log('genero');
         // console.log(genero.nome)
 
-
-        const response = await api.get('/users/' + user.uid + '/' + genero.nome);
+        const response = await api.get(
+          '/users/' + user.uid + '/' + genero.nome,
+        );
         // console.log('Dados buscados via API');
 
         const documents = response.data.documents;
         if (documents) {
-          console.log(documents);
-
+          console.log(genero.nome);
+          // console.log(documents);
+          let quantidadeGenero = 0;
+          console.log(quantidadeGenero);
           documents.map(d => {
-            // console.log(d.name);
-            let k = d.name.split(
-              'projects/pdm-aulas-71f86/databases/(default)/documents/users/'
-              + user.uid + '/'
-            );
-            console.log('k');
-            console.log(k);
-            console.log('d');
-            console.log(d.fields);        
-          })
+            quantidadeGenero++;
+            console.log(id);
+          });
+          data.push({
+            genero: genero.nome,
+            quantidade: quantidadeGenero,
+          });
         }
       }
+      console.log(data);
+      setEstantes(data);
     } catch (error) {
       console.error('Error getting subcollections:', error);
       throw error;
@@ -70,8 +74,8 @@ export const EstanteProvider = ({ children }) => {
 
   const getShelves = async () => {
     try {
-      console.log('user')
-      console.log(user)
+      console.log('user');
+      console.log(user);
       console.log('Generos');
       console.log(generos);
 
@@ -81,7 +85,9 @@ export const EstanteProvider = ({ children }) => {
         // console.log('genero');
         // console.log(genero.nome);
 
-        const resposta = await api.get('/users/' + user.uid + '/' + genero.nome + '/');
+        const resposta = await api.get(
+          '/users/' + user.uid + '/' + genero.nome + '/',
+        );
         // console.log('Dados buscados via API');
         // console.log(resposta.data.documents);
 
@@ -90,8 +96,11 @@ export const EstanteProvider = ({ children }) => {
           documents.map(d => {
             // console.log(d.name);
             let k = d.name.split(
-              'projects/pdm-aulas-71f86/databases/(default)/documents/users/'
-              + user.uid + '/' + genero.nome + '/',
+              'projects/pdm-aulas-71f86/databases/(default)/documents/users/' +
+                user.uid +
+                '/' +
+                genero.nome +
+                '/',
             );
             // console.log('k');
             // console.log(k);
@@ -106,14 +115,14 @@ export const EstanteProvider = ({ children }) => {
               genero: genero.nome,
               uid: k[1],
             });
-            console.log(dados)
+            console.log(dados);
             // console.log(k[1]);
           });
         }
       }
       // })
       console.log(dados);
-      setLivros(dados);
+      // setLivros(dados);
       return dados;
     } catch (resposta) {
       setErrorMessage(resposta);
@@ -127,8 +136,8 @@ export const EstanteProvider = ({ children }) => {
     try {
       await api.post('/estantes/', {
         fields: {
-          genero: { stringValue: val.genero },
-          quantidade: { stringValue: val.quantidade },
+          genero: {stringValue: val.genero},
+          quantidade: {stringValue: val.quantidade},
         },
       });
       showToast('Dados salvos.');
@@ -147,8 +156,8 @@ export const EstanteProvider = ({ children }) => {
     try {
       await api.patch('/estantes/' + val.uid, {
         fields: {
-          genero: { stringValue: val.genero },
-          quantidade: { stringValue: val.quantidade },
+          genero: {stringValue: val.genero},
+          quantidade: {stringValue: val.quantidade},
         },
       });
       showToast('Dados salvos.');
@@ -181,6 +190,7 @@ export const EstanteProvider = ({ children }) => {
     <EstantesContext.Provider
       value={{
         estantes,
+        getGenres,
         saveShelf,
         updateShelf,
         deleteShelf,

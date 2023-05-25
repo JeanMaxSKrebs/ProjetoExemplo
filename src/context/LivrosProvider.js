@@ -5,12 +5,14 @@ import firestore from '@react-native-firebase/firestore';
 import {ApiContext} from './ApiProvider';
 import {AuthUserContext} from './AuthUserProvider';
 import {GenerosContext} from './GenerosProvider';
+import {EstantesContext} from './EstantesProvider';
 
 export const LivrosContext = createContext({});
 
 export const LivrosProvider = ({children}) => {
   const {generos} = useContext(GenerosContext);
   const {user, getUser} = useContext(AuthUserContext);
+  const {getGenres} = useContext(EstantesContext);
   const [livros, setLivros] = useState([]);
   const [errorMessage, setErrorMessage] = useState({});
   // const {atualizarContador} = useContext(EstantesContext);
@@ -28,6 +30,7 @@ export const LivrosProvider = ({children}) => {
       // console.log('user')
       // console.log(user)
       getLivros();
+      getGenres();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api]);
@@ -105,6 +108,7 @@ export const LivrosProvider = ({children}) => {
       });
       showToast('Dados salvos.');
       getLivros();
+      getGenres();
       return true;
     } catch (response) {
       setErrorMessage(response);
@@ -149,6 +153,7 @@ export const LivrosProvider = ({children}) => {
 
       showToast('Dados salvos.');
       getLivros();
+      getGenres();
       return true;
     } catch (response) {
       setErrorMessage(response);
@@ -165,6 +170,7 @@ export const LivrosProvider = ({children}) => {
       await api.delete('/users/' + user.uid + '/' + genero + '/' + uid);
       showToast('Livro excluído.');
       getLivros();
+      getGenres();
       return true;
     } catch (response) {
       setErrorMessage(response);
