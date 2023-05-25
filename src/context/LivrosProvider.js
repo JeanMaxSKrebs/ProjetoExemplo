@@ -1,16 +1,16 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { ToastAndroid } from 'react-native';
+import React, {createContext, useState, useContext, useEffect} from 'react';
+import {ToastAndroid} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 // import {EstantesContext} from './EstantesProvider';
-import { ApiContext } from './ApiProvider';
-import { AuthUserContext } from './AuthUserProvider';
-import { GenerosContext } from './GenerosProvider';
+import {ApiContext} from './ApiProvider';
+import {AuthUserContext} from './AuthUserProvider';
+import {GenerosContext} from './GenerosProvider';
 
 export const LivrosContext = createContext({});
 
-export const LivrosProvider = ({ children }) => {
-  const { generos } = useContext(GenerosContext);
-  const { user, getUser } = useContext(AuthUserContext);
+export const LivrosProvider = ({children}) => {
+  const {generos} = useContext(GenerosContext);
+  const {user, getUser} = useContext(AuthUserContext);
   const [livros, setLivros] = useState([]);
   const [errorMessage, setErrorMessage] = useState({});
   // const {atualizarContador} = useContext(EstantesContext);
@@ -19,7 +19,7 @@ export const LivrosProvider = ({ children }) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   };
 
-  const { api } = useContext(ApiContext);
+  const {api} = useContext(ApiContext);
   // console.log('api1');
   // console.log(api);
 
@@ -45,7 +45,9 @@ export const LivrosProvider = ({ children }) => {
         // console.log('genero');
         // console.log(genero.nome);
 
-        const resposta = await api.get('/users/' + user.uid + '/' + genero.nome + '/');
+        const resposta = await api.get(
+          '/users/' + user.uid + '/' + genero.nome + '/',
+        );
         // console.log('Dados buscados via API');
         // console.log(resposta.data.documents);
 
@@ -54,8 +56,11 @@ export const LivrosProvider = ({ children }) => {
           documents.map(d => {
             // console.log(d.name);
             let k = d.name.split(
-              'projects/pdm-aulas-71f86/databases/(default)/documents/users/'
-              + user.uid + '/' + genero.nome + '/',
+              'projects/pdm-aulas-71f86/databases/(default)/documents/users/' +
+                user.uid +
+                '/' +
+                genero.nome +
+                '/',
             );
             // console.log('k');
             // console.log(k);
@@ -86,18 +91,62 @@ export const LivrosProvider = ({ children }) => {
     }
   };
 
-  const saveBook = async (val) => {
+  const saveBook = async val => {
     console.log('val');
     console.log(val);
     try {
-      await api.post('/users/' + user.uid + '/' + val.genero + '/' + val.uid, {
+      await api.post('/users/' + user.uid + '/' + val.genero, {
         fields: {
-          nome: { stringValue: val.nome },
-          descricao: { stringValue: val.descricao },
-          autor: { stringValue: val.autor },
-          volume: { integerValue: val.volume },
+          nome: {stringValue: val.nome},
+          descricao: {stringValue: val.descricao},
+          autor: {stringValue: val.autor},
+          volume: {integerValue: val.volume},
         },
       });
+      showToast('Dados salvos.');
+      getLivros();
+      return true;
+    } catch (response) {
+      setErrorMessage(response);
+      console.error('Erro ao saveBook via API.');
+      console.error(response);
+      return false;
+    }
+  };
+
+  const updateBook = async val => {
+    console.log('val');
+    console.log(val);
+    try {
+      console.log(val.generoAntigo);
+      console.log(val.genero);
+      if (val.generoAntigo === val.genero) {
+        await api.patch(
+          '/users/' + user.uid + '/' + val.genero + '/' + val.uid,
+          {
+            fields: {
+              nome: {stringValue: val.nome},
+              descricao: {stringValue: val.descricao},
+              autor: {stringValue: val.autor},
+              volume: {integerValue: val.volume},
+            },
+          },
+        );
+      } else {
+        console.log('putz');
+        await api.delete(
+          '/users/' + user.uid + '/' + val.generoAntigo + '/' + val.uid,
+        );
+        await api.post('/users/' + user.uid + '/' + val.genero, {
+          fields: {
+            nome: {stringValue: val.nome},
+            descricao: {stringValue: val.descricao},
+            autor: {stringValue: val.autor},
+            volume: {integerValue: val.volume},
+          },
+        });
+      }
+
       showToast('Dados salvos.');
       getLivros();
       return true;
@@ -126,7 +175,8 @@ export const LivrosProvider = ({ children }) => {
   };
 
   return (
-    <LivrosContext.Provider value={{ livros, getLivros, saveBook, deleteBook }}>
+    <LivrosContext.Provider
+      value={{livros, getLivros, saveBook, updateBook, deleteBook}}>
       {children}
     </LivrosContext.Provider>
   );

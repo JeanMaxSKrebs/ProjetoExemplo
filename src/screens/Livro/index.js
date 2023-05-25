@@ -1,22 +1,23 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Alert, ToastAndroid } from 'react-native';
-import { Container, TextInput, Text } from './styles';
+import React, {useState, useEffect, useContext} from 'react';
+import {Alert, ToastAndroid} from 'react-native';
+import {Container, TextInput, Text} from './styles';
 import MeuButton from '../../components/MeuButton';
 import Loading from '../../components/Loading';
-import { LivrosContext } from '../../context/LivrosProvider';
+import {LivrosContext} from '../../context/LivrosProvider';
 import DeleteButton from '../../components/DeleteButton';
-import { View, Modal, FlatList, TouchableOpacity } from 'react-native';
-import { GenerosContext } from '../../context/GenerosProvider';
+import {View, Modal, FlatList, TouchableOpacity} from 'react-native';
+import {GenerosContext} from '../../context/GenerosProvider';
 
-const Livro = ({ route, navigation }) => {
+const Livro = ({route, navigation}) => {
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [autor, setAutor] = useState('');
   const [volume, setVolume] = useState('');
   const [genero, setGenero] = useState('');
+  const [generoAntigo, setGeneroAntigo] = useState(null);
   const [uid, setUid] = useState('');
   const [loading, setLoading] = useState(false);
-  const { saveBook, deleteBook } = useContext(LivrosContext);
+  const {saveBook, updateBook, deleteBook} = useContext(LivrosContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const generosContext = useContext(GenerosContext);
@@ -28,7 +29,6 @@ const Livro = ({ route, navigation }) => {
   // console.log(generos)
 
   useEffect(() => {
-
     // console.log(route.params.value);
     if (route.params.value === null) {
       setNome('');
@@ -45,8 +45,9 @@ const Livro = ({ route, navigation }) => {
       setVolume(route.params.value.volume);
       setGenero(route.params.value.genero);
       setUid(route.params.value.uid);
+      setGeneroAntigo(route.params.value.genero);
     }
-
+    console.log(genero);
     return () => {
       // console.log('desmontou Livro');
     };
@@ -54,7 +55,27 @@ const Livro = ({ route, navigation }) => {
 
   const salvar = async () => {
     setLoading(true);
-    if (await saveBook({ uid, nome, descricao, autor, volume, genero })) {
+    if (await saveBook({uid, nome, descricao, autor, volume, genero})) {
+      setLoading(false);
+      navigation.goBack();
+    } else {
+      ToastAndroid.show('Atenção', 'Digite todos os campos.');
+    }
+  };
+
+  const atualizar = async () => {
+    setLoading(true);
+    if (
+      await updateBook({
+        uid,
+        nome,
+        descricao,
+        autor,
+        volume,
+        genero,
+        generoAntigo,
+      })
+    ) {
       setLoading(false);
       navigation.goBack();
     } else {
@@ -66,14 +87,14 @@ const Livro = ({ route, navigation }) => {
     Alert.alert('Atenção', 'Você tem Certeza?', [
       {
         text: 'Não',
-        onPress: () => { },
+        onPress: () => {},
         style: 'cancel',
       },
       {
         text: 'Sim',
         onPress: async () => {
           setLoading(true);
-          console.log(uid, genero)
+          console.log(uid, genero);
           if (await deleteBook(uid, genero)) {
             ToastAndroid.show('Deletado', ToastAndroid.SHORT);
           } else {
@@ -86,7 +107,7 @@ const Livro = ({ route, navigation }) => {
     ]);
   };
 
-  const selectGenero = (nome) => {
+  const selectGenero = nome => {
     setGenero(nome);
     setModalVisible(false);
   };
@@ -94,7 +115,6 @@ const Livro = ({ route, navigation }) => {
   // console.log(generos);
   // console.log(generos.generos[0].nome);
   // console.log(generos.generos[1].nome);
-
 
   return (
     <Container>
@@ -136,12 +156,11 @@ const Livro = ({ route, navigation }) => {
       <Modal
         visible={modalVisible}
         animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
+        onRequestClose={() => setModalVisible(false)}>
         <View>
           <FlatList
             data={generos}
-            renderItem={({ item }) => (
+            renderItem={({item}) => (
               <TouchableOpacity onPress={() => selectGenero(item.nome)}>
                 <Text>{item.nome}</Text>
               </TouchableOpacity>
@@ -150,7 +169,11 @@ const Livro = ({ route, navigation }) => {
         </View>
       </Modal>
 
-      <MeuButton texto="Salvar" onClick={salvar} />
+      {generoAntigo ? (
+        <MeuButton texto="Atualizar" onClick={atualizar} />
+      ) : (
+        <MeuButton texto="Salvar" onClick={salvar} />
+      )}
       {uid ? <DeleteButton texto="Excluir" onClick={excluir} /> : null}
       {loading && <Loading />}
     </Container>
