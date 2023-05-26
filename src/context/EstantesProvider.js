@@ -12,6 +12,7 @@ export const EstantesContext = createContext({});
 export const EstanteProvider = ({children}) => {
   const {generos} = useContext(GenerosContext);
   const {user, getUser} = useContext(AuthUserContext);
+  const [estante, setEstante] = useState([]);
   const [estantes, setEstantes] = useState([]);
   const [errorMessage, setErrorMessage] = useState({});
   const {api} = useContext(ApiContext);
@@ -21,9 +22,7 @@ export const EstanteProvider = ({children}) => {
   useEffect(() => {
     if (api) {
       // console.log("contador");
-      // atualizarContador();
-      getGenres();
-      // getShelves();
+      getShelves();
       // console.log('api2');
       // console.log(estantes);
     }
@@ -33,38 +32,39 @@ export const EstanteProvider = ({children}) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   };
 
-  const getGenres = async () => {
+  const getShelves = async () => {
     try {
-      console.log('user');
-      console.log(user);
+      // console.log('user');
+      // console.log(user);
       let data = [];
-      let id = 0;
       for (const genero of generos) {
         // console.log('genero');
         // console.log(genero.nome)
+        if(user) {
+          const response = await api.get(
+            '/users/' + user.uid + '/' + genero.nome,
+            );
+          
+          // console.log('Dados buscados via API');
 
-        const response = await api.get(
-          '/users/' + user.uid + '/' + genero.nome,
-        );
-        // console.log('Dados buscados via API');
-
-        const documents = response.data.documents;
-        if (documents) {
-          console.log(genero.nome);
-          // console.log(documents);
-          let quantidadeGenero = 0;
-          console.log(quantidadeGenero);
-          documents.map(d => {
-            quantidadeGenero++;
-            console.log(id);
-          });
-          data.push({
-            genero: genero.nome,
-            quantidade: quantidadeGenero,
-          });
+          const documents = response.data.documents;
+          if (documents) {
+              // console.log(genero.nome);
+              // console.log(documents);
+              let quantidadeGenero = 0;
+              // console.log(quantidadeGenero);
+              documents.map(d => {
+                quantidadeGenero++;
+              });
+              data.push({
+                genero: genero.nome,
+                quantidade: quantidadeGenero,
+              });
+          }
         }
       }
-      console.log(data);
+      // console.log("data")
+      // console.log(data);
       setEstantes(data);
     } catch (error) {
       console.error('Error getting subcollections:', error);
@@ -72,58 +72,48 @@ export const EstanteProvider = ({children}) => {
     }
   };
 
-  const getShelves = async () => {
+  const getShelf = async (genero) => {
     try {
       console.log('user');
       console.log(user);
-      console.log('Generos');
-      console.log(generos);
+      console.log('Genero selecionado');
+      console.log(genero);
 
       let dados = [];
-      // generos.forEach(async genero => {
-      for (const genero of generos) {
-        // console.log('genero');
-        // console.log(genero.nome);
 
-        const resposta = await api.get(
-          '/users/' + user.uid + '/' + genero.nome + '/',
-        );
-        // console.log('Dados buscados via API');
-        // console.log(resposta.data.documents);
+      const resposta = await api.get(
+        '/users/' + user.uid + '/' + genero + '/',
+      );
+      console.log('Dados buscados via API');
+      console.log(resposta.data.documents);
 
-        const documents = resposta.data.documents;
-        if (documents) {
-          documents.map(d => {
-            // console.log(d.name);
-            let k = d.name.split(
-              'projects/pdm-aulas-71f86/databases/(default)/documents/users/' +
-                user.uid +
-                '/' +
-                genero.nome +
-                '/',
-            );
-            // console.log('k');
-            // console.log(k);
-            // console.log('d');
-            // console.log(d.fields);
+      const documents = resposta.data.documents;
+      if (documents) {
+        documents.map(d => {
+          // console.log(d.name);
+          let k = d.name.split(
+            'projects/pdm-aulas-71f86/databases/(default)/documents/users/' +
+              user.uid +
+              '/' +
+              genero +
+              '/',
+          );
 
-            dados.push({
-              nome: d.fields.nome.stringValue,
-              descricao: d.fields.descricao.stringValue,
-              autor: d.fields.autor.stringValue,
-              volume: d.fields.volume.integerValue,
-              genero: genero.nome,
-              uid: k[1],
-            });
-            console.log(dados);
-            // console.log(k[1]);
+          dados.push({
+            nome: d.fields.nome.stringValue,
+            descricao: d.fields.descricao.stringValue,
+            autor: d.fields.autor.stringValue,
+            volume: d.fields.volume.integerValue,
+            genero: genero.nome,
+            uid: k[1],
           });
-        }
+          // console.log(dados);
+          // console.log(k[1]);
+        });
       }
-      // })
+      console.log('dados');
       console.log(dados);
-      // setLivros(dados);
-      return dados;
+      setEstante(dados);
     } catch (resposta) {
       setErrorMessage(resposta);
       console.log('Erro ao buscar livros via API.');
@@ -173,7 +163,7 @@ export const EstanteProvider = ({children}) => {
 
   const deleteShelf = async val => {
     try {
-      console.log(val);
+      // console.log(val);
       await api.delete('/estantes/' + val);
       showToast('Estante excluída.');
       getShelves();
@@ -189,8 +179,10 @@ export const EstanteProvider = ({children}) => {
   return (
     <EstantesContext.Provider
       value={{
+        estante,
         estantes,
-        getGenres,
+        getShelf,
+        getShelves,
         saveShelf,
         updateShelf,
         deleteShelf,

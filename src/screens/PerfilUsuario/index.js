@@ -14,7 +14,7 @@ const PerfilUsuario = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [oldPass, setOldPass] = useState('');
   const [newPass, setNewPass] = useState('');
-  const [newPassConfirm, setNePassConfirm] = useState('');
+  const [newPassConfirm, setNewPassConfirm] = useState('');
   const [loading, setLoading] = useState(false);
   const {save, del, updatePassword} = useContext(ProfileContext);
 
@@ -116,7 +116,7 @@ const PerfilUsuario = ({navigation}) => {
 
   function alterarSenha() {
     if (oldPass !== '' && newPass !== '' && newPassConfirm !== '') {
-      if (oldPass !== user.pass) {
+      if (oldPass !== user.senha) {
         Alert.alert('Veja!', 'A senha antiga é diferente da senha digitada.');
       } else if (newPass === newPassConfirm) {
         //TODO: fazer validar senha forte (uma caixa alta, um número, um caractere especial, tam. mín. 6)
@@ -192,7 +192,7 @@ const PerfilUsuario = ({navigation}) => {
         placeholder="Confirme a nova senha"
         keyboardType="default"
         returnKeyType="next"
-        onChangeText={t => setNePassConfirm(t)}
+        onChangeText={t => setNewPassConfirm(t)}
       />
       <MeuButton texto="Salvar" onClick={salvar} />
       <DeleteButton texto="Excluir Conta" onClick={excluir} />

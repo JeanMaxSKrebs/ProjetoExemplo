@@ -5,14 +5,12 @@ import firestore from '@react-native-firebase/firestore';
 import {ApiContext} from './ApiProvider';
 import {AuthUserContext} from './AuthUserProvider';
 import {GenerosContext} from './GenerosProvider';
-import {EstantesContext} from './EstantesProvider';
 
 export const LivrosContext = createContext({});
 
 export const LivrosProvider = ({children}) => {
   const {generos} = useContext(GenerosContext);
-  const {user, getUser} = useContext(AuthUserContext);
-  const {getGenres} = useContext(EstantesContext);
+  const {user} = useContext(AuthUserContext);
   const [livros, setLivros] = useState([]);
   const [errorMessage, setErrorMessage] = useState({});
   // const {atualizarContador} = useContext(EstantesContext);
@@ -30,7 +28,6 @@ export const LivrosProvider = ({children}) => {
       // console.log('user')
       // console.log(user)
       getLivros();
-      getGenres();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api]);
@@ -42,51 +39,54 @@ export const LivrosProvider = ({children}) => {
       // console.log('Generos');
       // console.log(generos);
 
-      let dados = [];
-      // generos.forEach(async genero => {
-      for (const genero of generos) {
-        // console.log('genero');
-        // console.log(genero.nome);
+      if(user) {
 
-        const resposta = await api.get(
-          '/users/' + user.uid + '/' + genero.nome + '/',
-        );
-        // console.log('Dados buscados via API');
-        // console.log(resposta.data.documents);
+        let dados = [];
+        // generos.forEach(async genero => {
+        for (const genero of generos) {
+          // console.log('genero');
+          // console.log(genero.nome);
 
-        const documents = resposta.data.documents;
-        if (documents) {
-          documents.map(d => {
-            // console.log(d.name);
-            let k = d.name.split(
-              'projects/pdm-aulas-71f86/databases/(default)/documents/users/' +
+          const resposta = await api.get(
+            '/users/' + user.uid + '/' + genero.nome + '/',
+          );
+          // console.log('Dados buscados via API');
+          // console.log(resposta.data.documents);
+
+          const documents = resposta.data.documents;
+          if (documents) {
+            documents.map(d => {
+              // console.log(d.name);
+              let k = d.name.split(
+                'projects/pdm-aulas-71f86/databases/(default)/documents/users/' +
                 user.uid +
                 '/' +
                 genero.nome +
                 '/',
-            );
-            // console.log('k');
-            // console.log(k);
-            // console.log('d');
-            // console.log(d.fields);
-
-            dados.push({
-              nome: d.fields.nome.stringValue,
-              descricao: d.fields.descricao.stringValue,
-              autor: d.fields.autor.stringValue,
-              volume: d.fields.volume.integerValue,
-              genero: genero.nome,
-              uid: k[1],
+                );
+                // console.log('k');
+                // console.log(k);
+                // console.log('d');
+                // console.log(d.fields);
+                
+                dados.push({
+                nome: d.fields.nome.stringValue,
+                descricao: d.fields.descricao.stringValue,
+                autor: d.fields.autor.stringValue,
+                volume: d.fields.volume.integerValue,
+                genero: genero.nome,
+                uid: k[1],
+              });
+              // console.log(dados)
+              // console.log(k[1]);
             });
-            // console.log(dados)
-            // console.log(k[1]);
-          });
+          }
         }
+        // })
+        // console.log(dados);
+        setLivros(dados);
+        return dados;
       }
-      // })
-      // console.log(dados);
-      setLivros(dados);
-      return dados;
     } catch (resposta) {
       setErrorMessage(resposta);
       console.log('Erro ao buscar livros via API.');
@@ -95,8 +95,8 @@ export const LivrosProvider = ({children}) => {
   };
 
   const saveBook = async val => {
-    console.log('val');
-    console.log(val);
+    // console.log('val');
+    // console.log(val);
     try {
       await api.post('/users/' + user.uid + '/' + val.genero, {
         fields: {
@@ -108,7 +108,6 @@ export const LivrosProvider = ({children}) => {
       });
       showToast('Dados salvos.');
       getLivros();
-      getGenres();
       return true;
     } catch (response) {
       setErrorMessage(response);
@@ -119,11 +118,11 @@ export const LivrosProvider = ({children}) => {
   };
 
   const updateBook = async val => {
-    console.log('val');
-    console.log(val);
+    // console.log('val');
+    // console.log(val);
     try {
-      console.log(val.generoAntigo);
-      console.log(val.genero);
+      // console.log(val.genero);
+      // console.log(val.generoAntigo);
       if (val.generoAntigo === val.genero) {
         await api.patch(
           '/users/' + user.uid + '/' + val.genero + '/' + val.uid,
@@ -137,23 +136,21 @@ export const LivrosProvider = ({children}) => {
           },
         );
       } else {
-        console.log('putz');
-        await api.delete(
-          '/users/' + user.uid + '/' + val.generoAntigo + '/' + val.uid,
-        );
+        await api.delete('/users/' + user.uid + '/' + val.generoAntigo + '/' + val.uid);
+        console.log("deletou")
         await api.post('/users/' + user.uid + '/' + val.genero, {
           fields: {
             nome: {stringValue: val.nome},
             descricao: {stringValue: val.descricao},
             autor: {stringValue: val.autor},
             volume: {integerValue: val.volume},
-          },
+          }
         });
+        console.log("atualizou")
       }
 
       showToast('Dados salvos.');
       getLivros();
-      getGenres();
       return true;
     } catch (response) {
       setErrorMessage(response);
@@ -164,13 +161,12 @@ export const LivrosProvider = ({children}) => {
   };
 
   const deleteBook = async (uid, genero) => {
-    console.log('uid');
-    console.log(uid);
+    // console.log('uid');
+    // console.log(uid);
     try {
       await api.delete('/users/' + user.uid + '/' + genero + '/' + uid);
       showToast('Livro excluído.');
       getLivros();
-      getGenres();
       return true;
     } catch (response) {
       setErrorMessage(response);

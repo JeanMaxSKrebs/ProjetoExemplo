@@ -75,7 +75,7 @@ const Livros = ({ navigation }) => {
       />
       {/* <ScrollView> */}
       <Text style={styles.texto}> Coleções dos Livros </Text>
-      {console.log('container')}
+      {/* {console.log('container')} */}
 
       <Container>
         {/* {console.log('livros')}
@@ -86,7 +86,7 @@ const Livros = ({ navigation }) => {
           data={livrosTemp.length > 0 ? livrosTemp : livros}
           renderItem={renderItem}
           keyExtractor={item => item.uid}
-        />
+          />
       </Container>
       {/* </ScrollView > */}
       <AddFloatButton onClick={() => routeLivro(null)} />

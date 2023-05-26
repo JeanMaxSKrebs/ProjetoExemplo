@@ -14,6 +14,7 @@ import SearchBar from '../../components/SearchBar';
 const Estantes = ({navigation}) => {
   const {estantes} = useContext(EstantesContext);
   const [estantesTemp, setEstantesTemp] = useState([]);
+  const {getShelves, getShelf} = useContext(EstantesContext);
 
   useEffect(() => {
     navigation.setOptions({
@@ -26,33 +27,32 @@ const Estantes = ({navigation}) => {
       // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => <LogoutButton />,
     });
+
+    getShelves();
   }, [navigation]);
 
-  const filterEstante = text => {
-    if (text !== '') {
-      let filtro = [];
-      // console.log(estantes);
-
-      filtro.push(
-        ...estantes.filter(est =>
-          est.genero.toLowerCase().includes(text.toLowerCase()),
-        ),
-      );
-
-      // console.log('filtro');
-      // console.log(filtro);
-      // console.log(filtro.length);
-      if (filtro.length > 0) {
-        setEstantesTemp(filtro);
-        // console.log(filtro.length);
-      } else {
-        setEstantesTemp([]);
+  const filterEstantes = text => {
+    let filtro = [];
+    estantes.filter(estante => {
+      if (estante.genero.toLowerCase().includes(text.toLowerCase())) {
+        filtro.push(estante);
       }
+    });
+    console.log('filtro');
+    console.log(filtro);
+    // console.log(filtro.length);
+    if (filtro.length > 0) {
+      setEstantesTemp(filtro);
+      // console.log(filtro.length);
+    } else {
+      setEstantesTemp([]);
     }
   };
 
   const routeEstante = item => {
-    //console.log(item);
+    console.log('valores item');
+    console.log(item);
+    getShelf(item.genero)
     navigation.dispatch(
       CommonActions.navigate({
         name: 'Estante',
@@ -62,14 +62,16 @@ const Estantes = ({navigation}) => {
   };
 
   const renderItem = ({item}) => (
+    // console.log('item'),
+    // console.log(item),
     <Item item={item}
-    //  onPress={() => routeEstante(item)}
+     onPress={() => routeEstante(item)}
       />
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      <SearchBar search={filterEstante} name={'Estantes'} />
+      <SearchBar search={filterEstantes} name={'Estantes'} />
       <Image
         source={require('../../assets/images/estante.png')}
         accessibilityLabel="logo do app"
@@ -79,11 +81,12 @@ const Estantes = ({navigation}) => {
         {console.log(estantes)}
         {console.log('estantesTemp')}
         {console.log(estantesTemp)} */}
+
         <FlatList
-          data={estantesTemp.length > 0 ? estantesTemp : estantes}
+          data={estantesTemp.length > 0 ? estantesTemp : estantes }
           renderItem={renderItem}
-          keyExtractor={item => item.uid}
-        />
+          keyExtractor={item => item.genero}
+          />
       </Container>
       {/* <AddFloatButton onClick={() => routeEstante(null)} /> */}
     </SafeAreaView>

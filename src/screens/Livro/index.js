@@ -7,6 +7,7 @@ import {LivrosContext} from '../../context/LivrosProvider';
 import DeleteButton from '../../components/DeleteButton';
 import {View, Modal, FlatList, TouchableOpacity} from 'react-native';
 import {GenerosContext} from '../../context/GenerosProvider';
+import {EstantesContext} from '../../context/EstantesProvider';
 
 const Livro = ({route, navigation}) => {
   const [nome, setNome] = useState('');
@@ -18,6 +19,7 @@ const Livro = ({route, navigation}) => {
   const [uid, setUid] = useState('');
   const [loading, setLoading] = useState(false);
   const {saveBook, updateBook, deleteBook} = useContext(LivrosContext);
+  const {getShelf, getShelves } = useContext(EstantesContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const generosContext = useContext(GenerosContext);
@@ -77,7 +79,16 @@ const Livro = ({route, navigation}) => {
       })
     ) {
       setLoading(false);
-      navigation.goBack();
+      console.log(genero);
+      console.log(generoAntigo);
+      getShelves();
+      
+      getShelf(genero)
+      
+      if(generoAntigo!==genero) {
+        navigation.goBack();
+      }
+      navigation.goBack();      
     } else {
       ToastAndroid.show('Atenção', 'Digite todos os campos.');
     }

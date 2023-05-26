@@ -55,8 +55,8 @@ export const GeneroProvider = ({children}) => {
   };
 
   const saveGender = async val => {
-    console.log('val');
-    console.log(val);
+    // console.log('val');
+    // console.log(val);
     try {
       await api.post('/generos/', {
         fields: {

@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 'auto',
     padding: 10,
-    borderBottomWidth: 1,
   },
   text: {
     fontSize: 26,

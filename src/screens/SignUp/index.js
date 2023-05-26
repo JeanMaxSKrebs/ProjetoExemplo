@@ -71,7 +71,7 @@ const SignUp = ({navigation}) => {
         returnKeyType="send"
         onChangeText={t => setConfirmSenha(t)}
       />
-      <MyButtom text="Cadastrar" onClick={cadastar} />
+      <MeuButton texto="Cadastrar" onClick={cadastar} />
       {loading && <Loading />}
     </Body>
   );
