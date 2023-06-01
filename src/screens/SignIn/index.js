@@ -80,6 +80,7 @@ const SignIn = ({navigation}) => {
             accessibilityLabel={'logo do app'}
           />
           <TextInput
+            placeholderTextColor="gray"
             style={styles.input}
             placeholder="Email"
             keyboardType="email-address"
@@ -87,6 +88,7 @@ const SignIn = ({navigation}) => {
             onChangeText={t => setEmail(t)}
           />
           <TextInput
+            placeholderTextColor="gray"
             style={styles.input}
             secureTextEntry={true}
             placeholder="Senha"

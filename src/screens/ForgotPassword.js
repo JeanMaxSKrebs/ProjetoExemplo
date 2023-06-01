@@ -45,6 +45,7 @@ const ForgotPassword = ({navigation}) => {
   return (
     <View style={styles.container}>
       <TextInput
+        placeholderTextColor="gray"
         style={styles.input}
         placeholder="Email"
         keyBoardType="email-address"

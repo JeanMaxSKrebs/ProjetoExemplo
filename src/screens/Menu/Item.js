@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   text: {
+    color: 'black',
     fontSize: 26,
     paddingLeft: 10,
     textAlign: 'left',

@@ -130,6 +130,7 @@ const Livro = ({route, navigation}) => {
   return (
     <Container>
       <TextInput
+        placeholderTextColor="gray"
         placeholder="Nome do Livro"
         keyboardType="default"
         returnKeyType="go"
@@ -137,6 +138,7 @@ const Livro = ({route, navigation}) => {
         value={nome}
       />
       <TextInput
+        placeholderTextColor="gray"
         placeholder="Descricão"
         keyboardType="default"
         returnKeyType="go"
@@ -144,6 +146,7 @@ const Livro = ({route, navigation}) => {
         value={descricao}
       />
       <TextInput
+        placeholderTextColor="gray"
         placeholder="Autor"
         keyboardType="default"
         returnKeyType="go"
@@ -151,6 +154,7 @@ const Livro = ({route, navigation}) => {
         value={autor}
       />
       <TextInput
+        placeholderTextColor="gray"
         placeholder="Volume"
         keyboardType="numeric"
         returnKeyType="go"
@@ -159,6 +163,7 @@ const Livro = ({route, navigation}) => {
       />
       <TouchableOpacity onPress={() => setModalVisible(true)}>
         <TextInput
+          placeholderTextColor="gray"
           placeholder="Selecione um gênero"
           value={genero}
           editable={false}
@@ -173,7 +178,7 @@ const Livro = ({route, navigation}) => {
             data={generos}
             renderItem={({item}) => (
               <TouchableOpacity onPress={() => selectGenero(item.nome)}>
-                <Text>{item.nome}</Text>
+                <Text style={{ color: 'black' }}>{item.nome}</Text>
               </TouchableOpacity>
             )}
           />

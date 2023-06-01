@@ -9,6 +9,7 @@ export const Body = styled.SafeAreaView`
 `;
 
 export const TextInput = styled.TextInput`
+  color: black;
   width: 70%;
   height: 50px;
   border-bottom-color: ${COLORS.black};

@@ -8,6 +8,7 @@ export const Body = styled.View`
 `;
 
 export const TextInput = styled.TextInput`
+  color: black;
   width: 95%;
   height: 50px;
   border-bottom-color: ${COLORS.grey};

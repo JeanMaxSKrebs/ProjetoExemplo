@@ -4,7 +4,7 @@ import {Image} from '../Preload/styles';
 import {COLORS} from '../../assets/colors';
 import {CommonActions} from '@react-navigation/native';
 import {Alert, ToastAndroid} from 'react-native';
-import {Container, TextInput, FlatList} from './styles';
+import {Container, FlatList} from './styles';
 import LogoutButton from '../../components/LogoutButton';
 
 import Item from './Item.js';

@@ -83,18 +83,21 @@ const SignUp = ({navigation}) => {
   return (
     <Body>
       <TextInput
+        placeholderTextColor="gray"
         placeholder="Nome Completo"
         keyboardType="default"
         returnKeyType="next"
         onChangeText={t => setNome(t)}
       />
       <TextInput
+        placeholderTextColor="gray"
         placeholder="Email"
         keyboardType="email-address"
         returnKeyType="next"
         onChangeText={t => setEmail(t)}
       />
       <TextInput
+        placeholderTextColor="gray"
         placeholder="Senha"
         keyboardType="default"
         returnKeyType="next"
@@ -102,6 +105,7 @@ const SignUp = ({navigation}) => {
         onChangeText={t => setSenha(t)}
       />
       <TextInput
+        placeholderTextColor="gray"
         placeholder="Confirmar Senha"
         keyboardType="default"
         returnKeyType="send"

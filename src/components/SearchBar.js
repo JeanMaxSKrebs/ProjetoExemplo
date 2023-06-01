@@ -10,6 +10,8 @@ const SearchBar = ({search, name}) => {
 
   return (
     <TextInput
+      color= 'black'
+      placeholderTextColor="gray"
       placeholder={`Pesquise ${name}`}
       keyboardType="default"
       returnKeyType="go"

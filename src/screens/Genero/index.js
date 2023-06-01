@@ -81,6 +81,8 @@ const Genero = ({route, navigation}) => {
   return (
     <Container>
       <TextInput
+        color="black"
+        placeholderTextColor="gray"
         placeholder="Nome do Gênero"
         keyboardType="default"
         returnKeyType="go"

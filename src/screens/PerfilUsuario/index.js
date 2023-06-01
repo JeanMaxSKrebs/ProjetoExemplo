@@ -155,8 +155,9 @@ const PerfilUsuario = ({navigation}) => {
 
   return (
     <Body>
-      <Text>Perfil do Usuário</Text>
+      <Text style={{ color: 'black' }}>Perfil do Usuário</Text>
       <TextInput
+        placeholderTextColor="gray"
         value={nome}
         placeholder="nome"
         keyboardType="default"
@@ -164,6 +165,7 @@ const PerfilUsuario = ({navigation}) => {
         onChangeText={t => setNome(t)}
       />
       <TextInput
+        placeholderTextColor="gray"
         value={email}
         editable={false}
         placeholder="email"
@@ -171,6 +173,7 @@ const PerfilUsuario = ({navigation}) => {
         returnKeyType="next"
       />
       <TextInput
+        placeholderTextColor="gray"
         value={oldPass}
         secureTextEntry={true}
         placeholder="Senha antiga"
@@ -179,6 +182,7 @@ const PerfilUsuario = ({navigation}) => {
         onChangeText={t => setOldPass(t)}
       />
       <TextInput
+        placeholderTextColor="gray"
         value={newPass}
         secureTextEntry={true}
         placeholder="Nova senha (mín. 6 caracteres)"
@@ -187,6 +191,7 @@ const PerfilUsuario = ({navigation}) => {
         onChangeText={t => setNewPass(t)}
       />
       <TextInput
+        placeholderTextColor="gray"
         value={newPassConfirm}
         secureTextEntry={true}
         placeholder="Confirme a nova senha"
