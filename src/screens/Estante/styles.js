@@ -5,7 +5,6 @@ export const Container = styled.SafeAreaView`
   flex: 1;
   align-items: center;
   padding-top: 20px;
-  background-color:  ${COLORS.gray};
   width: 100%;
 `;
 
@@ -13,7 +12,7 @@ export const TextInput = styled.TextInput`
   color: black;
   width: 95%;
   height: 50px;
-  border-bottom-color: ${COLORS.primary};
+  border-bottom-color: ${COLORS.black};
   border-bottom-width: 2px;
   font-size: 16px;
   padding-left: 2px;
@@ -24,5 +23,17 @@ export const TextInput = styled.TextInput`
 export const FlatList = styled.FlatList`
   /* background-color:  ${COLORS.red}; */
   width: 70%;
+
+`;
+
+export const Text = styled.Text`
+
+  width: 100%;
+  height: 100px;
+  font-size: 16px;
+  border: 1px;
+  border-color: ${COLORS.primaryDark};
+  background-color: ${COLORS.primary};
+  text-align: center;
 
 `;

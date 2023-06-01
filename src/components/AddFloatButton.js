@@ -17,11 +17,24 @@ const Button = styled.TouchableOpacity`
   border-radius: 100px;
 `;
 
-const AddFloatButton = ({onClick}) => {
-  return (
-    <Button onPress={() => onClick()}>
-      <Icon name="add" size={30} color={COLORS.white} />
-    </Button>
-  );
+const AddFloatButton = ({onClick, tipo}) => {
+  console.log(tipo)
+  switch (tipo) {
+    case 'map':
+      return (
+        <Button onPress={() => onClick()}>
+          <Icon name="locate-outline" size={30} color={COLORS.white} />
+        </Button>
+      );
+      break;
+  
+    default:
+      return (
+        <Button onPress={() => onClick()}>
+          <Icon name="add" size={30} color={COLORS.white} />
+        </Button>
+      );
+    break;
+  };
 };
 export default AddFloatButton;

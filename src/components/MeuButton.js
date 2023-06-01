@@ -17,11 +17,11 @@ const styles = StyleSheet.create({
   texto: {
     fontSize: 25,
     color: COLORS.primary,
+    textAlign: 'center',
   },
   button: {
     top: 10,
     width: '70%',
-    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.primaryDark,

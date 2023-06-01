@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import Menu from '../screens/Menu';
 import PerfilUsuario from '../screens/PerfilUsuario';
+import EstantesMap from '../screens/EstantesMap';
 
 import {COLORS} from '../assets/colors';
 import {StyleSheet, StatusBar} from 'react-native';
@@ -111,6 +112,13 @@ const Navigator = () => (
       <Stack.Screen
         component={PerfilUsuario}
         name="PerfilUsuario"
+        options={{
+          presentation: 'modal',
+        }}
+      />
+      <Stack.Screen
+        component={EstantesMap}
+        name="EstantesMap"
         options={{
           presentation: 'modal',
         }}

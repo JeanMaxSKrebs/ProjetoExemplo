@@ -4,6 +4,7 @@ import {Image} from '../Preload/styles';
 import {CommonActions} from '@react-navigation/native';
 import {COLORS} from '../../assets/colors';
 import LogoutButton from '../../components/LogoutButton';
+import MeuButton from '../../components/MeuButton';
 import {Container, FlatList} from './styles';
 import Item from './Item.js';
 import AddFloatButton from '../../components/AddFloatButton';
@@ -75,6 +76,10 @@ const Estantes = ({navigation}) => {
       <Image
         source={require('../../assets/images/estante.png')}
         accessibilityLabel="logo do app"
+      />
+      <MeuButton
+        texto="Visualizar no Mapa"
+        onClick={() => navigation.navigate('EstantesMap')}
       />
       <Container>
         {/* {console.log('estantes')}

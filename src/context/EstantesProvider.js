@@ -52,13 +52,21 @@ export const EstanteProvider = ({children}) => {
               // console.log(genero.nome);
               // console.log(documents);
               let quantidadeGenero = 0;
+              let latitude;
+              let longitude;
               // console.log(quantidadeGenero);
               documents.map(d => {
+                // console.log(d.fields.latitude.stringValue);
+                // console.log(d.fields.longitude.stringValue);
                 quantidadeGenero++;
+                // latitude = d.fields.latitude.stringValue;
+                // longitude = d.fields.longitude.stringValue;
               });
               data.push({
                 genero: genero.nome,
                 quantidade: quantidadeGenero,
+                latitude: latitude,
+                longitude: longitude,
               });
           }
         }
@@ -128,6 +136,8 @@ export const EstanteProvider = ({children}) => {
         fields: {
           genero: {stringValue: val.genero},
           quantidade: {stringValue: val.quantidade},
+          // latitude: {stringValue: val.latitude},
+          // longitude: {stringValue: val.longitude},
         },
       });
       showToast('Dados salvos.');
@@ -148,6 +158,8 @@ export const EstanteProvider = ({children}) => {
         fields: {
           genero: {stringValue: val.genero},
           quantidade: {stringValue: val.quantidade},
+          // latitude: {stringValue: val.latitude},
+          // longitude: {stringValue: val.longitude},
         },
       });
       showToast('Dados salvos.');

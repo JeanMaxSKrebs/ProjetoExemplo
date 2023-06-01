@@ -1,13 +1,13 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Alert, ToastAndroid} from 'react-native';
 import {Container, TextInput, Text} from './styles';
-import MeuButton from '../../components/MeuButton';
 import Loading from '../../components/Loading';
 import {LivrosContext} from '../../context/LivrosProvider';
 import DeleteButton from '../../components/DeleteButton';
 import {View, Modal, FlatList, TouchableOpacity} from 'react-native';
 import {GenerosContext} from '../../context/GenerosProvider';
 import {EstantesContext} from '../../context/EstantesProvider';
+import MeuButton from '../../components/MeuButton';
 
 const Livro = ({route, navigation}) => {
   const [nome, setNome] = useState('');

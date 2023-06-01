@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {SafeAreaView, ScrollView, View, Text, StyleSheet} from 'react-native';
+import {SafeAreaView, ScrollView, View, StyleSheet} from 'react-native';
 import {Image} from '../Preload/styles';
 import {COLORS} from '../../assets/colors';
 import {CommonActions} from '@react-navigation/native';
 import {Alert, ToastAndroid} from 'react-native';
-import {Container, FlatList} from './styles';
+import {Container, TextInput, Text, FlatList} from './styles';
 import LogoutButton from '../../components/LogoutButton';
+import AddFloatButton from '../../components/AddFloatButton';
 
 import Item from './Item.js';
 
@@ -20,6 +21,8 @@ import {EstantesContext} from '../../context/EstantesProvider';
 const Estante = ({route, navigation}) => {
   const [genero, setGenero] = useState('');
   const [quantidade, setQuantidade] = useState('');
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
   const [uid, setUid] = useState('');
   const [loading, setLoading] = useState(false);
   const {saveShelf, updateShelf, deleteShelf} = useContext(EstantesContext);
@@ -34,11 +37,14 @@ const Estante = ({route, navigation}) => {
     if (route.params.value === null) {
       setGenero('');
       setQuantidade('');
-
+      setLatitude('');
+      setLongitude('');
     } else {
       // console.log(route.params);
       setGenero(route.params.value.genero);
       setQuantidade(route.params.value.quantidade);
+      setLatitude(route.params.value.latitude);
+      setLongitude(route.params.value.longitude);
     }
 
     return () => {
@@ -51,7 +57,10 @@ const Estante = ({route, navigation}) => {
       // headerLeft: false,
       headerTitleAlign: 'center',
       // name: 'GERENCIA LIVROS',
-      title: 'BIBLIOTECA // ESTANTE' + genero.toUpperCase(), // deixei a name pq senao muda o nome da tab
+      // title: 'BIBLIOTECA // ESTANTE' + genero.toUpperCase(), // deixei a name pq senao muda o nome da tab
+      // title: genero ? `'BIBLIOTECA // ESTANTE ' {{genero.toUpperCase()}}`
+      // : 'BIBLIOTECA // ESTANTE // MAPA',
+      title: genero ? `BIBLIOTECA // ESTANTE ${genero.toUpperCase()}` : 'BIBLIOTECA // ESTANTE // MAPA',
       headerStyle: {backgroundColor: COLORS.primaryDark},
       headerTintColor: {color: COLORS.black},
       // eslint-disable-next-line react/no-unstable-nested-components
@@ -77,7 +86,7 @@ const Estante = ({route, navigation}) => {
     }
   };
 
-  const routeEstante = item => {
+  const routeLivro = item => {
     item.estante = true;
     console.log('item');
     console.log(item);
@@ -88,36 +97,88 @@ const Estante = ({route, navigation}) => {
       }),
     );
   };
+  const routeEstante = item => {
+    // item.estante = true;
+    console.log('item');
+    console.log(item);
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'Estante',
+        params: {value: item},
+      }),
+    );
+  };
 
   const renderItem = ({item}) => (
     item.genero = genero,
     <Item item={item}
-     onPress={() => routeEstante(item)}
+     onPress={() => routeLivro(item)}
       />
   );
 
-  return (
-      <SafeAreaView style={styles.container}>
-        <SearchBar search={filterEstante} name={'na estante: ' + genero} />
-        <Image
-          source={require('../../assets/images/estante.png')}
-          accessibilityLabel="logo do app"
+  function onGoBack(lat, long) {
+    setLatitude(lat.toString());
+    setLongitude(long.toString());
+  }
+
+  console.log('gener1o')
+  console.log(genero)
+  if(genero) {
+    return (
+        <SafeAreaView style={styles.container}>
+          <SearchBar search={filterEstante} name={'na estante: ' + genero} />
+          <Image
+            source={require('../../assets/images/estante.png')}
+            accessibilityLabel="logo do app"
+          />
+          {/* <MeuButton
+            texto="Visualizar no Mapa"
+            onClick={() => navigation.navigate('EstantesMap')}
+          /> */}
+          <Container>
+            {console.log('estante')}
+            {console.log(estante)}
+            {console.log('estanteTemp')}
+            {console.log(estanteTemp)}
+            <FlatList
+              // data={estanteTemp.length > 0 ? estanteTemp : estante}
+              data={estanteTemp.length > 0 ? estanteTemp : estante}
+              renderItem={renderItem}
+              keyExtractor={item => item.uid}
+              />
+          </Container>
+          <AddFloatButton tipo="map" onClick={() => routeEstante(estante)} />
+          </SafeAreaView>
+    );
+  } else {
+    return (
+      <Container>
+        <TextInput
+          placeholderTextColor="gray"
+          editable={false}
+          placeholder="Latitude"
+          keyboardType="default"
+          returnKeyType="go"
+          onChangeText={t => setLatitude(t)}
+          value={latitude}
         />
-        <Container>
-          {console.log('estante')}
-          {console.log(estante)}
-          {console.log('estanteTemp')}
-          {console.log(estanteTemp)}
-          <FlatList
-            // data={estanteTemp.length > 0 ? estanteTemp : estante}
-            data={estanteTemp.length > 0 ? estanteTemp : estante}
-            renderItem={renderItem}
-            keyExtractor={item => item.uid}
-            />
-        </Container>
-        {/* <AddFloatButton onClick={() => routeEstante(null)} /> */}
-        </SafeAreaView>
+        <TextInput
+          placeholderTextColor="gray"
+          editable={false}
+          placeholder="Longitude"
+          keyboardType="default"
+          returnKeyType="go"
+          onChangeText={t => setLongitude(t)}
+          value={longitude}
+        />
+
+        <MeuButton
+          texto="Obter Coordenadas no Mapa"
+          onClick={() => navigation.navigate('EstantesMap', {onGoBack})}
+        />
+      </Container>
   );
+  }
 };
 
 export default Estante;
