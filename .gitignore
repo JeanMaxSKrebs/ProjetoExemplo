@@ -22,6 +22,7 @@ DerivedData
 *.xcuserstate
 ios/.xcode.env.local
 
+android/app/src/debug/AndroidManifest.xml
 # Android/IntelliJ
 #
 build/
