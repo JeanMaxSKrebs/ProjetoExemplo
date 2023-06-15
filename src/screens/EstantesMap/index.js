@@ -2,12 +2,12 @@ import React, {useState, useContext} from 'react';
 import {StyleSheet, View, Alert, TouchableHighlight, Text} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {COLORS} from '../../assets/colors';
-import {EstanteContext} from '../../context/EstantesProvider';
+import {EstantesContext} from '../../context/EstantesProvider';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const EstantesMap = ({route}) => {
   const [mapType, setMapType] = useState('standard');
-  const {estantes} = useContext(EstanteContext);
+  const {estantes} = useContext(EstantesContext);
 
   const styles = StyleSheet.create({
     container: {

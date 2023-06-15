@@ -21,7 +21,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 ios/.xcode.env.local
-
+# manifesto
 android/app/src/debug/AndroidManifest.xml
 # Android/IntelliJ
 #
