@@ -15,7 +15,7 @@ import DeleteButton from '../../components/DeleteButton';
 import Loading from '../../components/Loading';
 import SearchBar from '../../components/SearchBar';
 
-import { LivrosContext } from '../../context/LivrosProvider';
+import {LivrosContext} from '../../context/LivrosProvider';
 import {EstantesContext} from '../../context/EstantesProvider';
 
 const Estante = ({route, navigation}) => {
@@ -29,7 +29,6 @@ const Estante = ({route, navigation}) => {
   const {estante} = useContext(EstantesContext);
   const {livros} = useContext(LivrosContext);
   const [estanteTemp, setEstanteTemp] = useState([]);
-
 
   useEffect(() => {
     console.log('params');
@@ -60,7 +59,9 @@ const Estante = ({route, navigation}) => {
       // title: 'BIBLIOTECA // ESTANTE' + genero.toUpperCase(), // deixei a name pq senao muda o nome da tab
       // title: genero ? `'BIBLIOTECA // ESTANTE ' {{genero.toUpperCase()}}`
       // : 'BIBLIOTECA // ESTANTE // MAPA',
-      title: genero ? `BIBLIOTECA // ESTANTE ${genero.toUpperCase()}` : 'BIBLIOTECA // ESTANTE // MAPA',
+      title: genero
+        ? `BIBLIOTECA // ESTANTE ${genero.toUpperCase()}`
+        : 'BIBLIOTECA // ESTANTE // MAPA',
       headerStyle: {backgroundColor: COLORS.primaryDark},
       headerTintColor: {color: COLORS.black},
       // eslint-disable-next-line react/no-unstable-nested-components
@@ -110,10 +111,8 @@ const Estante = ({route, navigation}) => {
   };
 
   const renderItem = ({item}) => (
-    item.genero = genero,
-    <Item item={item}
-     onPress={() => routeLivro(item)}
-      />
+    (item.genero = genero),
+    (<Item item={item} onPress={() => routeLivro(item)} />)
   );
 
   function onGoBack(lat, long) {
@@ -121,34 +120,34 @@ const Estante = ({route, navigation}) => {
     setLongitude(long.toString());
   }
 
-  console.log('gener1o')
-  console.log(genero)
-  if(genero) {
+  console.log('gener1o');
+  console.log(genero);
+  if (genero) {
     return (
-        <SafeAreaView style={styles.container}>
-          <SearchBar search={filterEstante} name={'na estante: ' + genero} />
-          <Image
-            source={require('../../assets/images/estante.png')}
-            accessibilityLabel="logo do app"
-          />
-          {/* <MeuButton
+      <SafeAreaView style={styles.container}>
+        <SearchBar search={filterEstante} name={'na estante: ' + genero} />
+        <Image
+          source={require('../../assets/images/estante.png')}
+          accessibilityLabel="logo do app"
+        />
+        {/* <MeuButton
             texto="Visualizar no Mapa"
             onClick={() => navigation.navigate('EstantesMap')}
           /> */}
-          <Container>
-            {console.log('estante')}
-            {console.log(estante)}
-            {console.log('estanteTemp')}
-            {console.log(estanteTemp)}
-            <FlatList
-              // data={estanteTemp.length > 0 ? estanteTemp : estante}
-              data={estanteTemp.length > 0 ? estanteTemp : estante}
-              renderItem={renderItem}
-              keyExtractor={item => item.uid}
-              />
-          </Container>
-          <AddFloatButton tipo="map" onClick={() => routeEstante(estante)} />
-          </SafeAreaView>
+        <Container>
+          {console.log('estante')}
+          {console.log(estante)}
+          {console.log('estanteTemp')}
+          {console.log(estanteTemp)}
+          <FlatList
+            // data={estanteTemp.length > 0 ? estanteTemp : estante}
+            data={estanteTemp.length > 0 ? estanteTemp : estante}
+            renderItem={renderItem}
+            keyExtractor={item => item.uid}
+          />
+        </Container>
+        <AddFloatButton tipo="map" onClick={() => routeEstante(estante)} />
+      </SafeAreaView>
     );
   } else {
     return (
@@ -177,7 +176,7 @@ const Estante = ({route, navigation}) => {
           onClick={() => navigation.navigate('EstantesMap', {onGoBack})}
         />
       </Container>
-  );
+    );
   }
 };
 

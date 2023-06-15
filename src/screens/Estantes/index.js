@@ -53,7 +53,7 @@ const Estantes = ({navigation}) => {
   const routeEstante = item => {
     console.log('valores item');
     console.log(item);
-    getShelf(item.genero)
+    getShelf(item.genero);
     navigation.dispatch(
       CommonActions.navigate({
         name: 'Estante',
@@ -65,9 +65,7 @@ const Estantes = ({navigation}) => {
   const renderItem = ({item}) => (
     // console.log('item'),
     // console.log(item),
-    <Item item={item}
-     onPress={() => routeEstante(item)}
-      />
+    <Item item={item} onPress={() => routeEstante(item)} />
   );
 
   return (
@@ -88,10 +86,10 @@ const Estantes = ({navigation}) => {
         {console.log(estantesTemp)} */}
 
         <FlatList
-          data={estantesTemp.length > 0 ? estantesTemp : estantes }
+          data={estantesTemp.length > 0 ? estantesTemp : estantes}
           renderItem={renderItem}
           keyExtractor={item => item.genero}
-          />
+        />
       </Container>
       {/* <AddFloatButton onClick={() => routeEstante(null)} /> */}
     </SafeAreaView>
