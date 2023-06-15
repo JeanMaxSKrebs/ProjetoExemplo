@@ -11,6 +11,7 @@ import Genero from '../screens/Genero';
 import Home from '../screens/Home';
 import Preload from '../screens/Preload';
 import SignUp from '../screens/SignUp';
+import Localizacao from '../screens/Localizacao';
 import ForgotPassword from '../screens/ForgotPassword';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -109,6 +110,7 @@ const Navigator = () => (
       <Stack.Screen component={Livro} name="Livro" />
       <Stack.Screen component={Estante} name="Estante" />
       <Stack.Screen component={Genero} name="Genero" />
+      <Stack.Screen component={Localizacao} name="Localizacao" />
       <Stack.Screen
         component={PerfilUsuario}
         name="PerfilUsuario"

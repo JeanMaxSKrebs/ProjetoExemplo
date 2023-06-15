@@ -156,8 +156,8 @@ export const EstanteProvider = ({children}) => {
         fields: {
           genero: {stringValue: val.genero},
           quantidade: {stringValue: val.quantidade},
-          // latitude: {stringValue: val.latitude},
-          // longitude: {stringValue: val.longitude},
+          latitude: {stringValue: val.latitude},
+          longitude: {stringValue: val.longitude},
         },
       });
       showToast('Dados salvos.');

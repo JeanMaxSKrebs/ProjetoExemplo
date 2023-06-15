@@ -15,7 +15,8 @@ import SearchBar from '../../components/SearchBar';
 const Estantes = ({navigation}) => {
   const {estantes} = useContext(EstantesContext);
   const [estantesTemp, setEstantesTemp] = useState([]);
-  const {getShelves, getShelf} = useContext(EstantesContext);
+  const {getShelves, getShelf, saveShelf, updateShelf, deleteShelf} =
+    useContext(EstantesContext);
 
   useEffect(() => {
     navigation.setOptions({

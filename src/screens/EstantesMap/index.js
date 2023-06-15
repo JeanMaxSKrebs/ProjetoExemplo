@@ -66,7 +66,8 @@ const EstantesMap = ({route}) => {
           latitudeDelta: 0.015, //baseado na documentação
           longitudeDelta: 0.0121, //baseado na documentação
         }}>
-        {estantes.map(estante => {
+        {console.log(estantes)}
+        {/* {estantes.map(estante => {
           return (
             <Marker
               key={estante.uid}
@@ -83,7 +84,7 @@ const EstantesMap = ({route}) => {
               />
             </Marker>
           );
-        })}
+        })} */}
       </MapView>
       <TouchableHighlight
         style={styles.button}
