@@ -12,9 +12,6 @@ const Button = styled.TouchableHighlight`
 `;
 
 const TextNome = styled.Text`
-  ::placeholder {
-    color: ${COLORS.gray};
-  }
   font-size: 18px;
   text-align: justify;
   color: ${COLORS.black};
