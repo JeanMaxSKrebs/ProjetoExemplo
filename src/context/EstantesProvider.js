@@ -40,34 +40,34 @@ export const EstanteProvider = ({children}) => {
       for (const genero of generos) {
         // console.log('genero');
         // console.log(genero.nome)
-        if(user) {
+        if (user) {
           const response = await api.get(
             '/users/' + user.uid + '/' + genero.nome,
-            );
-          
+          );
+
           // console.log('Dados buscados via API');
 
           const documents = response.data.documents;
           if (documents) {
-              // console.log(genero.nome);
-              // console.log(documents);
-              let quantidadeGenero = 0;
-              let latitude;
-              let longitude;
-              // console.log(quantidadeGenero);
-              documents.map(d => {
-                // console.log(d.fields.latitude.stringValue);
-                // console.log(d.fields.longitude.stringValue);
-                quantidadeGenero++;
-                // latitude = d.fields.latitude.stringValue;
-                // longitude = d.fields.longitude.stringValue;
-              });
-              data.push({
-                genero: genero.nome,
-                quantidade: quantidadeGenero,
-                latitude: latitude,
-                longitude: longitude,
-              });
+            // console.log(genero.nome);
+            // console.log(documents);
+            let quantidadeGenero = 0;
+            let latitude;
+            let longitude;
+            // console.log(quantidadeGenero);
+            documents.map(d => {
+              // console.log(d.fields.latitude.stringValue);
+              // console.log(d.fields.longitude.stringValue);
+              quantidadeGenero++;
+              // latitude = d.fields.latitude.stringValue;
+              // longitude = d.fields.longitude.stringValue;
+            });
+            data.push({
+              genero: genero.nome,
+              quantidade: quantidadeGenero,
+              latitude: latitude,
+              longitude: longitude,
+            });
           }
         }
       }
@@ -80,7 +80,7 @@ export const EstanteProvider = ({children}) => {
     }
   };
 
-  const getShelf = async (genero) => {
+  const getShelf = async genero => {
     try {
       console.log('user');
       console.log(user);
@@ -89,9 +89,7 @@ export const EstanteProvider = ({children}) => {
 
       let dados = [];
 
-      const resposta = await api.get(
-        '/users/' + user.uid + '/' + genero + '/',
-      );
+      const resposta = await api.get('/users/' + user.uid + '/' + genero + '/');
       console.log('Dados buscados via API');
       console.log(resposta.data.documents);
 
