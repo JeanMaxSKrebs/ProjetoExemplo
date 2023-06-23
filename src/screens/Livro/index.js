@@ -19,7 +19,7 @@ const Livro = ({route, navigation}) => {
   const [uid, setUid] = useState('');
   const [loading, setLoading] = useState(false);
   const {saveBook, updateBook, deleteBook} = useContext(LivrosContext);
-  const {getShelf, getShelves } = useContext(EstantesContext);
+  const {getShelf, getShelves} = useContext(EstantesContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const generosContext = useContext(GenerosContext);
@@ -82,13 +82,12 @@ const Livro = ({route, navigation}) => {
       console.log(genero);
       console.log(generoAntigo);
       getShelves();
-      
-      getShelf(genero)
-      
-      if(generoAntigo!==genero) {
+      getShelf(genero);
+
+      if (generoAntigo !== genero) {
         navigation.goBack();
       }
-      navigation.goBack();      
+      navigation.goBack();
     } else {
       ToastAndroid.show('Atenção', 'Digite todos os campos.');
     }
@@ -178,7 +177,7 @@ const Livro = ({route, navigation}) => {
             data={generos}
             renderItem={({item}) => (
               <TouchableOpacity onPress={() => selectGenero(item.nome)}>
-                <Text style={{ color: 'black' }}>{item.nome}</Text>
+                <Text style={{color: 'black'}}>{item.nome}</Text>
               </TouchableOpacity>
             )}
           />

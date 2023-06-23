@@ -15,7 +15,7 @@ const Localizacao = ({route, navigation}) => {
   const [longitude, setLongitude] = useState('0');
   const [uid, setUid] = useState('');
   const [loading, setLoading] = useState(false);
-  const {saveShelf, updateShelf, deleteShelf} = useContext(EstantesContext);
+  const {updateShelf, deleteShelf} = useContext(EstantesContext);
   const {estante} = useContext(EstantesContext);
   const [estanteTemp, setEstanteTemp] = useState([]);
 
@@ -47,25 +47,12 @@ const Localizacao = ({route, navigation}) => {
       estante.latitude = latitude;
       estante.longitude = longitude;
       setLoading(true);
-      if (uid) {
-        if (await updateShelf(estante)) {
-          ToastAndroid.show(
-            'Show! Você alterou com sucesso.',
-            ToastAndroid.LONG,
-          );
-        } else {
-          ToastAndroid.show('Ops! Erro ao alterar.', ToastAndroid.LONG);
-        }
+      if (await updateShelf(estante)) {
+        ToastAndroid.show('Show! Você alterou com sucesso.', ToastAndroid.LONG);
       } else {
-        if (await saveShelf(estante)) {
-          ToastAndroid.show(
-            'Show! Você inluiu com sucesso.',
-            ToastAndroid.LONG,
-          );
-        } else {
-          ToastAndroid.show('Ops! Erro ao alterar.', ToastAndroid.LONG);
-        }
+        ToastAndroid.show('Ops! Erro ao alterar.', ToastAndroid.LONG);
       }
+
       setLoading(false);
       navigation.goBack();
     } else {

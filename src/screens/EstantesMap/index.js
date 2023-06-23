@@ -28,7 +28,7 @@ const EstantesMap = ({route}) => {
       height: 50,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#fff0',
+      backgroundColor: COLORS.primaryDark,
       padding: 10,
       margin: 10,
       borderRadius: 5,
@@ -66,25 +66,26 @@ const EstantesMap = ({route}) => {
           latitudeDelta: 0.015, //baseado na documentação
           longitudeDelta: 0.0121, //baseado na documentação
         }}>
+        {console.log('localiza')}
         {console.log(estantes)}
-        {/* {estantes.map(estante => {
-          return (
-            <Marker
-              key={estante.uid}
-              coordinate={{
-                latitude: Number(estante.latitude),
-                longitude: Number(estante.longitude),
-              }}
-              title={estante.nome}
-              draggable>
-              <Icon
-                name="business"
-                color={mapType === 'standard' ? COLORS.primary : COLORS.white}
-                size={35}
-              />
-            </Marker>
-          );
-        })} */}
+        {estantes.map(estante => {
+          // return (
+          //   <Marker
+          //     key={estante.genero}
+          //     coordinate={{
+          //       latitude: Number(estante.latitude),
+          //       longitude: Number(estante.longitude),
+          //     }}
+          //     title={estante.genero}
+          //     draggable>
+          //     <Icon
+          //       name="business"
+          //       color={mapType === 'standard' ? COLORS.primary : COLORS.white}
+          //       size={35}
+          //     />
+          //   </Marker>
+          // );
+        })}
       </MapView>
       <TouchableHighlight
         style={styles.button}

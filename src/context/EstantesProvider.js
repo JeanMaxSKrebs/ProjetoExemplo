@@ -52,15 +52,11 @@ export const EstanteProvider = ({children}) => {
             // console.log(genero.nome);
             // console.log(documents);
             let quantidadeGenero = 0;
-            let latitude;
-            let longitude;
             // console.log(quantidadeGenero);
             documents.map(d => {
-              // console.log(d.fields.latitude.stringValue);
-              // console.log(d.fields.longitude.stringValue);
+              let latitude = d.fields.latitude.stringValue;
+              let longitude = d.fields.longitude.stringValue;
               quantidadeGenero++;
-              // latitude = d.fields.latitude.stringValue;
-              // longitude = d.fields.longitude.stringValue;
             });
             data.push({
               genero: genero.nome,
@@ -71,7 +67,7 @@ export const EstanteProvider = ({children}) => {
           }
         }
       }
-      // console.log("data")
+      // console.log('data');
       // console.log(data);
       setEstantes(data);
     } catch (error) {
@@ -82,16 +78,15 @@ export const EstanteProvider = ({children}) => {
 
   const getShelf = async genero => {
     try {
-      console.log('user');
-      console.log(user);
-      console.log('Genero selecionado');
-      console.log(genero);
-
+      // console.log('user');
+      // console.log(user);
+      // console.log('Genero selecionado');
+      // console.log(genero);
       let dados = [];
 
       const resposta = await api.get('/users/' + user.uid + '/' + genero + '/');
       console.log('Dados buscados via API');
-      console.log(resposta.data.documents);
+      // console.log(resposta.data.documents);
 
       const documents = resposta.data.documents;
       if (documents) {
@@ -117,45 +112,22 @@ export const EstanteProvider = ({children}) => {
           // console.log(k[1]);
         });
       }
-      console.log('dados');
-      console.log(dados);
+      // console.log('dados');
+      // console.log(dados);
       setEstante(dados);
     } catch (resposta) {
       setErrorMessage(resposta);
-      console.log('Erro ao buscar livros via API.');
+      console.log('Erro ao buscar estante via API.');
       console.log(resposta);
     }
   };
 
-  const saveShelf = async val => {
-    // console.log(val);
-    try {
-      await api.post('/estantes/', {
-        fields: {
-          genero: {stringValue: val.genero},
-          quantidade: {stringValue: val.quantidade},
-          // latitude: {stringValue: val.latitude},
-          // longitude: {stringValue: val.longitude},
-        },
-      });
-      showToast('Dados salvos.');
-      getShelves();
-      return true;
-    } catch (response) {
-      setErrorMessage(response);
-      console.error('Erro ao saveEstante via API.');
-      console.error(response);
-      return false;
-    }
-  };
-
   const updateShelf = async val => {
-    //console.log(val);
+    console.log('val');
+    console.log(val);
     try {
-      await api.patch('/estantes/' + val.uid, {
+      await api.patch('/users/' + user.uid + '/' + val.genero, {
         fields: {
-          genero: {stringValue: val.genero},
-          quantidade: {stringValue: val.quantidade},
           latitude: {stringValue: val.latitude},
           longitude: {stringValue: val.longitude},
         },
@@ -193,7 +165,6 @@ export const EstanteProvider = ({children}) => {
         estantes,
         getShelf,
         getShelves,
-        saveShelf,
         updateShelf,
         deleteShelf,
       }}>

@@ -39,8 +39,7 @@ export const LivrosProvider = ({children}) => {
       // console.log('Generos');
       // console.log(generos);
 
-      if(user) {
-
+      if (user) {
         let dados = [];
         // generos.forEach(async genero => {
         for (const genero of generos) {
@@ -59,17 +58,17 @@ export const LivrosProvider = ({children}) => {
               // console.log(d.name);
               let k = d.name.split(
                 'projects/pdm-aulas-71f86/databases/(default)/documents/users/' +
-                user.uid +
-                '/' +
-                genero.nome +
-                '/',
-                );
-                // console.log('k');
-                // console.log(k);
-                // console.log('d');
-                // console.log(d.fields);
-                
-                dados.push({
+                  user.uid +
+                  '/' +
+                  genero.nome +
+                  '/',
+              );
+              // console.log('k');
+              // console.log(k);
+              // console.log('d');
+              // console.log(d.fields);
+
+              dados.push({
                 nome: d.fields.nome.stringValue,
                 descricao: d.fields.descricao.stringValue,
                 autor: d.fields.autor.stringValue,
@@ -136,17 +135,19 @@ export const LivrosProvider = ({children}) => {
           },
         );
       } else {
-        await api.delete('/users/' + user.uid + '/' + val.generoAntigo + '/' + val.uid);
-        console.log("deletou")
+        await api.delete(
+          '/users/' + user.uid + '/' + val.generoAntigo + '/' + val.uid,
+        );
+        console.log('deletou');
         await api.post('/users/' + user.uid + '/' + val.genero, {
           fields: {
             nome: {stringValue: val.nome},
             descricao: {stringValue: val.descricao},
             autor: {stringValue: val.autor},
             volume: {integerValue: val.volume},
-          }
+          },
         });
-        console.log("atualizou")
+        console.log('atualizou');
       }
 
       showToast('Dados salvos.');

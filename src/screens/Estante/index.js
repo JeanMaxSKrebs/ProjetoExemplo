@@ -11,7 +11,6 @@ import Item from './Item.js';
 
 import SearchBar from '../../components/SearchBar';
 
-import {LivrosContext} from '../../context/LivrosProvider';
 import {EstantesContext} from '../../context/EstantesProvider';
 
 const Estante = ({route, navigation}) => {
@@ -21,9 +20,8 @@ const Estante = ({route, navigation}) => {
   const [longitude, setLongitude] = useState('0');
   const [uid, setUid] = useState('');
   const [loading, setLoading] = useState(false);
-  const {saveShelf, updateShelf, deleteShelf} = useContext(EstantesContext);
+  const {getShelf, updateShelf} = useContext(EstantesContext);
   const {estante} = useContext(EstantesContext);
-  const {livros} = useContext(LivrosContext);
   const [estanteTemp, setEstanteTemp] = useState([]);
 
   useEffect(() => {
@@ -32,14 +30,14 @@ const Estante = ({route, navigation}) => {
     if (route.params.value === null) {
       setGenero('');
       setQuantidade('');
-      setLatitude('');
-      setLongitude('');
+      setLatitude(0);
+      setLongitude(0);
     } else {
-      console.log('route.params.value.genero');
       setGenero(route.params.value.genero);
       setQuantidade(route.params.value.quantidade);
       setLatitude(route.params.value.latitude);
       setLongitude(route.params.value.longitude);
+      getShelf(route.params.value.genero);
     }
 
     return () => {
@@ -47,31 +45,9 @@ const Estante = ({route, navigation}) => {
     };
   }, [route]);
 
-  useEffect(() => {
-    console.log('genero mapa');
-    console.log(genero);
-
-    navigation.setOptions({
-      // headerLeft: false,
-      headerTitleAlign: 'center',
-      // name: 'GERENCIA LIVROS',
-      // title: 'BIBLIOTECA // ESTANTE' + genero.toUpperCase(), // deixei a name pq senao muda o nome da tab
-      // title: genero ? `'BIBLIOTECA // ESTANTE ' {{genero.toUpperCase()}}`
-      // : 'BIBLIOTECA // ESTANTE // MAPA',
-      title: `BIBLIOTECA // ESTANTE ${genero}`,
-      //TODO
-      // ? `BIBLIOTECA // ESTANTE ${genero.toUpperCase()}`
-      // : 'BIBLIOTECA // ESTANTE // MAPA',
-      headerStyle: {backgroundColor: COLORS.primaryDark},
-      headerTintColor: {color: COLORS.black},
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerRight: () => <LogoutButton />,
-    });
-  }, [navigation, genero]);
-
   const filterEstante = text => {
     let filtro = [];
-    livros.filter(livro => {
+    estante.filter(livro => {
       if (livro.nome.toLowerCase().includes(text.toLowerCase())) {
         filtro.push(livro);
       }
@@ -98,9 +74,8 @@ const Estante = ({route, navigation}) => {
       }),
     );
   };
-  const routeEstante = item => {
+  const routeLocaliza = item => {
     // item.estante = true;
-    console.log('itemasd');
     console.log(item);
     navigation.dispatch(
       CommonActions.navigate({
@@ -141,7 +116,7 @@ const Estante = ({route, navigation}) => {
       </Container>
       <AddFloatButton
         tipo="map"
-        onClick={() => routeEstante({genero, quantidade})}
+        onClick={() => routeLocaliza({genero, quantidade, latitude, longitude})}
       />
     </SafeAreaView>
   );

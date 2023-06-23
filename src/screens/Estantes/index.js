@@ -15,7 +15,7 @@ import SearchBar from '../../components/SearchBar';
 const Estantes = ({navigation}) => {
   const {estantes} = useContext(EstantesContext);
   const [estantesTemp, setEstantesTemp] = useState([]);
-  const {getShelves, getShelf, saveShelf, updateShelf, deleteShelf} =
+  const {getShelves, getShelf, updateShelf, deleteShelf} =
     useContext(EstantesContext);
 
   useEffect(() => {
@@ -54,7 +54,6 @@ const Estantes = ({navigation}) => {
   const routeEstante = item => {
     console.log('valores item');
     console.log(item);
-    getShelf(item.genero);
     navigation.dispatch(
       CommonActions.navigate({
         name: 'Estante',
